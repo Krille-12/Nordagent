@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="da" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nordagent — AI-automationer der sparer jer tid</title>
+  <meta name="description" content="Nordagent bygger intelligente automationer og AI-agenter til danske virksomheder." />
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:   { DEFAULT: '#faf8f5', dark: '#f0ece4' },
+            warm:    { 50: '#faf8f5', 100: '#f0ece4', 200: '#e0d8cc', 300: '#c8bfb0', 400: '#a89888', 500: '#8a7a6a', 600: '#6e6054', 700: '#544840', 800: '#3a302c', 900: '#241e1a' },
+            sand:    { DEFAULT: '#c8a97e', light: '#e8d8c0', dark: '#a07850' },
+            cognac:  { DEFAULT: '#8c5e3c', light: '#c4916a' },
+            moss:    { DEFAULT: '#6b8c6b', light: '#a8c4a0' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    html, body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Warm off-white base */
+    body { background-color: #faf8f5; color: #3a302c; }
+
+    /* Navbar backdrop */
+    .navbar-blur {
+      background: rgba(250, 248, 245, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* Scroll animations */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Card */
+    .card {
+      background: #fff;
+      border: 1px solid #e8e0d4;
+      border-radius: 1.25rem;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .card:hover {
+      box-shadow: 0 8px 32px rgba(140, 94, 60, 0.10);
+      transform: translateY(-2px);
+    }
+
+    /* Hero warm gradient */
+    .hero-bg {
+      background: linear-gradient(150deg, #faf8f5 0%, #f5ede0 50%, #ede8df 100%);
+    }
+
+    /* Section alternating */
+    .section-warm { background-color: #f5f0e8; }
+    .section-white { background-color: #ffffff; }
+    .section-cream { background-color: #faf8f5; }
+
+    /* Dark section (very warm dark) */
+    .section-dark {
+      background-color: #2e2420;
+      color: #f0ece4;
+    }
+
+    /* Geo decorations */
+    .geo { position: absolute; border-radius: 50%; background: #c8a97e; opacity: 0.08; pointer-events: none; }
+
+    /* Form */
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d8d0c4;
+      border-radius: 0.625rem;
+      background: #faf8f5;
+      color: #3a302c;
+      font-size: 0.9375rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+      border-color: #c8a97e;
+      box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.15);
+      background: #fff;
+    }
+    .form-input::placeholder { color: #a89888; }
+
+    /* Mobile menu */
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease;
+    }
+    #mobile-menu.open {
+      max-height: 480px;
+      opacity: 1;
+    }
+
+    /* Process number circles */
+    .step-num {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    /* Badge pill */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+
+    /* Lang toggle active */
+    .lang-active { font-weight: 700; color: #3a302c; }
+    .lang-inactive { font-weight: 400; color: #a89888; }
+    .lang-active-light { font-weight: 700; color: #f0ece4; }
+    .lang-inactive-light { font-weight: 400; color: #7a6a60; }
+
+    /* Texture overlay for wood-hint on dark section */
+    .wood-hint {
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 40px,
+        rgba(200,169,126,0.025) 40px,
+        rgba(200,169,126,0.025) 41px
+      );
+    }
+
+    /* Subtle grain texture */
+    .grain::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════ -->
+<header id="navbar" class="fixed top-0 left-0 right-0 z-50 border-b border-warm-200/60 transition-shadow duration-300" role="banner">
+  <nav class="navbar-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-8">
+
+      <!-- Logo -->
+      <a href="#" class="text-xl font-bold tracking-tight text-warm-900 shrink-0" aria-label="Nordagent — hjem">
+        Nord<span style="color:#8c5e3c">agent</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="hidden md:flex items-center gap-6 text-sm text-warm-600 font-medium" role="list">
+        <li>
+          <a href="#ydelser" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Ydelser</span><span data-lang="en" style="display:none">Services</span>
+          </a>
+        </li>
+        <li>
+          <a href="#eksempler" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Eksempler</span><span data-lang="en" style="display:none">Examples</span>
+          </a>
+        </li>
+        <li>
+          <a href="#proces" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Proces</span><span data-lang="en" style="display:none">Process</span>
+          </a>
+        </li>
+        <li>
+          <a href="#om" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Om os</span><span data-lang="en" style="display:none">About</span>
+          </a>
+        </li>
+        <li>
+          <a href="#kontakt" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Kontakt</span><span data-lang="en" style="display:none">Contact</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="hidden md:flex items-center gap-5 shrink-0">
+        <!-- Language toggle -->
+        <div class="flex items-center gap-1.5 text-sm" role="group" aria-label="Sprogvalg">
+          <button id="btn-da" onclick="setLanguage('da')" class="px-1.5 py-0.5 rounded lang-active transition-colors" aria-pressed="true">DA</button>
+          <span class="text-warm-300">|</span>
+          <button id="btn-en" onclick="setLanguage('en')" class="px-1.5 py-0.5 rounded lang-inactive transition-colors" aria-pressed="false">EN</button>
+        </div>
+        <!-- CTA -->
+        <a href="#kontakt" class="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sand" style="background:#8c5e3c;" onmouseover="this.style.background='#7a5030'" onmouseout="this.style.background='#8c5e3c'">
+          <span data-lang="da">Kontakt os</span><span data-lang="en" style="display:none">Get in touch</span>
+        </a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button id="mobile-toggle" class="md:hidden p-2 rounded-lg hover:bg-warm-100 transition-colors" aria-label="Åbn menu" aria-expanded="false" aria-controls="mobile-menu">
+        <i data-lucide="menu" class="w-5 h-5 text-warm-700"></i>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" role="navigation" aria-label="Mobil navigation">
+      <div class="max-w-6xl mx-auto px-6 pb-5 flex flex-col gap-4 text-sm font-medium text-warm-700 border-t border-warm-200/60">
+        <div class="pt-4 flex flex-col gap-3">
+          <a href="#ydelser" onclick="closeMobileMenu()" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Ydelser</span><span data-lang="en" style="display:none">Services</span>
+          </a>
+          <a href="#eksempler" onclick="closeMobileMenu()" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Eksempler</span><span data-lang="en" style="display:none">Examples</span>
+          </a>
+          <a href="#proces" onclick="closeMobileMenu()" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Proces</span><span data-lang="en" style="display:none">Process</span>
+          </a>
+          <a href="#om" onclick="closeMobileMenu()" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Om os</span><span data-lang="en" style="display:none">About</span>
+          </a>
+          <a href="#kontakt" onclick="closeMobileMenu()" class="hover:text-warm-900 transition-colors">
+            <span data-lang="da">Kontakt</span><span data-lang="en" style="display:none">Contact</span>
+          </a>
+        </div>
+        <div class="pt-3 border-t border-warm-200/60 flex items-center gap-3">
+          <button onclick="setLanguage('da'); closeMobileMenu();" id="mob-btn-da" class="text-sm lang-active">DA</button>
+          <span class="text-warm-300">|</span>
+          <button onclick="setLanguage('en'); closeMobileMenu();" id="mob-btn-en" class="text-sm lang-inactive">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section class="hero-bg relative overflow-hidden pt-32 pb-24 md:pt-44 md:pb-36" aria-labelledby="hero-heading">
+  <!-- Geometric shapes -->
+  <div class="geo" style="width:500px;height:500px;top:-180px;right:-120px;"></div>
+  <div class="geo" style="width:220px;height:220px;bottom:-60px;left:-60px;"></div>
+  <div class="absolute top-32 right-1/4 w-1.5 h-1.5 rounded-full" style="background:#8c5e3c;opacity:0.2;"></div>
+  <div class="absolute top-56 right-1/3 w-1 h-1 rounded-full" style="background:#c8a97e;opacity:0.4;"></div>
+  <div class="absolute bottom-24 right-1/4 w-2 h-2 rounded-full" style="background:#6b8c6b;opacity:0.2;"></div>
+
+  <div class="relative max-w-6xl mx-auto px-6">
+    <div class="max-w-3xl">
+
+      <!-- Badge -->
+      <div class="mb-6 fade-up">
+        <span class="badge" style="background:rgba(140,94,60,0.1);color:#8c5e3c;">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span data-lang="da">AI-automationer til danske virksomheder</span>
+          <span data-lang="en" style="display:none">AI automation for modern businesses</span>
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 id="hero-heading" class="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight text-warm-900 mb-6 fade-up">
+        <span data-lang="da">Jeres medarbejdere bruger timer på opgaver, der kan klares på sekunder</span>
+        <span data-lang="en" style="display:none">Your team spends hours on tasks that take seconds to automate</span>
+      </h1>
+
+      <!-- Subtext -->
+      <p class="text-lg md:text-xl text-warm-500 leading-relaxed mb-10 max-w-2xl fade-up">
+        <span data-lang="da">Nordagent bygger intelligente automationer og AI-agenter, der overtager det gentagne arbejde — så jeres team kan fokusere på det, der skaber værdi.</span>
+        <span data-lang="en" style="display:none">Nordagent builds intelligent automations and AI agents that take over repetitive work — so your team can focus on what truly creates value.</span>
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 fade-up">
+        <a href="#eksempler" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-white transition-colors focus:outline-none focus:ring-2 focus:ring-sand focus:ring-offset-2" style="background:#8c5e3c;" onmouseover="this.style.background='#7a5030'" onmouseout="this.style.background='#8c5e3c'">
+          <span data-lang="da">Se hvad I kan spare</span>
+          <span data-lang="en" style="display:none">See what you can save</span>
+          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </a>
+        <a href="#kontakt" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-warm-800 border border-warm-300 bg-white/70 hover:bg-white hover:border-warm-400 transition-colors focus:outline-none focus:ring-2 focus:ring-sand focus:ring-offset-2">
+          <span data-lang="da">Kontakt os</span>
+          <span data-lang="en" style="display:none">Get in touch</span>
+        </a>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="mt-14 flex flex-wrap items-center gap-6 text-sm text-warm-400 fade-up">
+        <span class="flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4" style="color:#6b8c6b;"></i>
+          GDPR-compliant
+        </span>
+        <span class="flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4" style="color:#6b8c6b;"></i>
+          <span data-lang="da">Dansk virksomhed</span>
+          <span data-lang="en" style="display:none">Danish company</span>
+        </span>
+        <span class="flex items-center gap-2">
+          <i data-lucide="zap" class="w-4 h-4" style="color:#6b8c6b;"></i>
+          <span data-lang="da">Klar på få uger</span>
+          <span data-lang="en" style="display:none">Ready in weeks</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROBLEM-SEKTION
+════════════════════════════════════════════ -->
+<section id="ydelser" class="section-white py-24 md:py-32" aria-labelledby="problem-heading">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="max-w-2xl mx-auto text-center mb-16 fade-up">
+      <h2 id="problem-heading" class="text-3xl md:text-4xl font-bold text-warm-900 mb-4">
+        <span data-lang="da">Kender I det her?</span>
+        <span data-lang="en" style="display:none">Sound familiar?</span>
+      </h2>
+      <p class="text-warm-500 text-lg">
+        <span data-lang="da">Mange virksomheder spilder enorme mængder tid på opgaver, som teknologi sagtens kan løse.</span>
+        <span data-lang="en" style="display:none">Many businesses waste enormous amounts of time on tasks that technology can easily handle.</span>
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5 mb-14">
+      <!-- Scenario 1 -->
+      <div class="card p-7 fade-up">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:#f5ede0;">
+          <i data-lucide="file-text" class="w-5 h-5" style="color:#8c5e3c;"></i>
+        </div>
+        <p class="text-warm-700 font-medium leading-relaxed">
+          <span data-lang="da">"Jeres bogholder copy-paster fakturaer manuelt — dag efter dag"</span>
+          <span data-lang="en" style="display:none">"Your accountant manually copies invoices — day after day"</span>
+        </p>
+      </div>
+      <!-- Scenario 2 -->
+      <div class="card p-7 fade-up" style="transition-delay:0.1s">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:#f5ede0;">
+          <i data-lucide="user-x" class="w-5 h-5" style="color:#8c5e3c;"></i>
+        </div>
+        <p class="text-warm-700 font-medium leading-relaxed">
+          <span data-lang="da">"Jeres sælger glemmer at følge op på nye leads"</span>
+          <span data-lang="en" style="display:none">"Your sales team keeps forgetting to follow up on new leads"</span>
+        </p>
+      </div>
+      <!-- Scenario 3 -->
+      <div class="card p-7 fade-up" style="transition-delay:0.2s">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:#f5ede0;">
+          <i data-lucide="repeat" class="w-5 h-5" style="color:#8c5e3c;"></i>
+        </div>
+        <p class="text-warm-700 font-medium leading-relaxed">
+          <span data-lang="da">"Jeres kundeservice svarer på de samme spørgsmål igen og igen"</span>
+          <span data-lang="en" style="display:none">"Your customer service team answers the same questions over and over"</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="text-center fade-up">
+      <p class="text-lg text-warm-600 max-w-xl mx-auto">
+        <span data-lang="da">Det behøver ikke være sådan. <strong class="text-warm-900">De fleste af de opgaver kan automatiseres i dag.</strong></span>
+        <span data-lang="en" style="display:none">It doesn't have to be this way. <strong class="text-warm-900">Most of these tasks can be automated today.</strong></span>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EKSEMPLER
+════════════════════════════════════════════ -->
+<section id="eksempler" class="section-warm py-24 md:py-32" aria-labelledby="examples-heading">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="max-w-2xl mx-auto text-center mb-16 fade-up">
+      <h2 id="examples-heading" class="text-3xl md:text-4xl font-bold text-warm-900 mb-4">
+        <span data-lang="da">Se hvad en AI-agent kan gøre for jer</span>
+        <span data-lang="en" style="display:none">See what an AI agent can do for you</span>
+      </h2>
+      <p class="text-warm-500 text-lg">
+        <span data-lang="da">Konkrete eksempler på opgaver vi allerede løser for virksomheder som jeres.</span>
+        <span data-lang="en" style="display:none">Real-world examples of tasks we already solve for businesses like yours.</span>
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- Kort 1 — Bogholder -->
+      <div class="card p-8 flex flex-col fade-up">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#f5ede0;">
+            <i data-lucide="receipt" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-warm-900 mt-1 leading-snug">
+            <span data-lang="da">Den automatiske bogholder</span>
+            <span data-lang="en" style="display:none">The automatic bookkeeper</span>
+          </h3>
+        </div>
+
+        <!-- Flow -->
+        <div class="space-y-3 mb-7 flex-1">
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">Hvad sker</span>
+              <span data-lang="en" style="display:none">Trigger</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">En faktura lander i indbakken</span>
+              <span data-lang="en" style="display:none">An invoice arrives in the inbox</span>
+            </p>
+          </div>
+          <div class="w-full h-px" style="background:#e8e0d4;"></div>
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">AI'en</span>
+              <span data-lang="en" style="display:none">AI does</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">Læser beløb, CVR og kontonummer, bogfører det i jeres system, og giver besked på Teams hvis noget ser forkert ud</span>
+              <span data-lang="en" style="display:none">Reads the amount, VAT and account number, records it in your system, and flags anything unusual on Teams</span>
+            </p>
+          </div>
+        </div>
+
+        <span class="badge" style="background:rgba(107,140,107,0.12);color:#4a6e4a;align-self:flex-start;">
+          <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+          <span data-lang="da">15 min sparet pr. faktura</span>
+          <span data-lang="en" style="display:none">15 minutes saved per invoice</span>
+        </span>
+      </div>
+
+      <!-- Kort 2 — Kundeservice -->
+      <div class="card p-8 flex flex-col fade-up" style="transition-delay:0.1s">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#f5ede0;">
+            <i data-lucide="message-circle" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-warm-900 mt-1 leading-snug">
+            <span data-lang="da">Den intelligente kundeservice-agent</span>
+            <span data-lang="en" style="display:none">The intelligent customer service agent</span>
+          </h3>
+        </div>
+
+        <div class="space-y-3 mb-7 flex-1">
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">Hvad sker</span>
+              <span data-lang="en" style="display:none">Trigger</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">En kunde skriver en email</span>
+              <span data-lang="en" style="display:none">A customer sends an email</span>
+            </p>
+          </div>
+          <div class="w-full h-px" style="background:#e8e0d4;"></div>
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">AI'en</span>
+              <span data-lang="en" style="display:none">AI does</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">Forstår om det er en reklamation, et spørgsmål eller en bestilling — og sender det til den rette person med et foreslået svar</span>
+              <span data-lang="en" style="display:none">Identifies if it's a complaint, a question, or an order — routes it to the right person with a suggested reply</span>
+            </p>
+          </div>
+        </div>
+
+        <span class="badge" style="background:rgba(107,140,107,0.12);color:#4a6e4a;align-self:flex-start;">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+          <span data-lang="da">Responstid: fra timer til sekunder</span>
+          <span data-lang="en" style="display:none">Response time: from hours to seconds</span>
+        </span>
+      </div>
+
+      <!-- Kort 3 — CRM -->
+      <div class="card p-8 flex flex-col fade-up" style="transition-delay:0.15s">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#f5ede0;">
+            <i data-lucide="users" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-warm-900 mt-1 leading-snug">
+            <span data-lang="da">Selvkørende CRM-opfølgning</span>
+            <span data-lang="en" style="display:none">Self-driving CRM follow-up</span>
+          </h3>
+        </div>
+
+        <div class="space-y-3 mb-7 flex-1">
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">Hvad sker</span>
+              <span data-lang="en" style="display:none">Trigger</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">En ny kunde oprettes i jeres CRM</span>
+              <span data-lang="en" style="display:none">A new customer is created in your CRM</span>
+            </p>
+          </div>
+          <div class="w-full h-px" style="background:#e8e0d4;"></div>
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">AI'en</span>
+              <span data-lang="en" style="display:none">AI does</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">Sender automatisk velkomstmail, sælgeren får påmindelse dag 3, og ledelsen kan se status i realtid</span>
+              <span data-lang="en" style="display:none">Sends a welcome email automatically, reminds the sales rep on day 3, and shows management live status</span>
+            </p>
+          </div>
+        </div>
+
+        <span class="badge" style="background:rgba(107,140,107,0.12);color:#4a6e4a;align-self:flex-start;">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+          <span data-lang="da">Ingen leads falder mellem to stole</span>
+          <span data-lang="en" style="display:none">No leads slip through the cracks</span>
+        </span>
+      </div>
+
+      <!-- Kort 4 — Datatjek -->
+      <div class="card p-8 flex flex-col fade-up" style="transition-delay:0.2s">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#f5ede0;">
+            <i data-lucide="database" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-warm-900 mt-1 leading-snug">
+            <span data-lang="da">Datatjek på autopilot</span>
+            <span data-lang="en" style="display:none">Data enrichment on autopilot</span>
+          </h3>
+        </div>
+
+        <div class="space-y-3 mb-7 flex-1">
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">Hvad sker</span>
+              <span data-lang="en" style="display:none">Trigger</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">Nye kunder tilføjes løbende til jeres database</span>
+              <span data-lang="en" style="display:none">New customers are added to your database</span>
+            </p>
+          </div>
+          <div class="w-full h-px" style="background:#e8e0d4;"></div>
+          <div class="flex gap-3">
+            <span class="text-xs font-bold uppercase tracking-wide text-warm-400 w-20 shrink-0 pt-0.5">
+              <span data-lang="da">AI'en</span>
+              <span data-lang="en" style="display:none">AI does</span>
+            </span>
+            <p class="text-sm text-warm-600 leading-relaxed">
+              <span data-lang="da">Slår automatisk CVR-numre op, tjekker om kunden er aktiv, og beriger jeres kundedata — uden at nogen løfter en finger</span>
+              <span data-lang="en" style="display:none">Automatically looks up company registrations, verifies customer status, and enriches your data — without anyone lifting a finger</span>
+            </p>
+          </div>
+        </div>
+
+        <span class="badge" style="background:rgba(107,140,107,0.12);color:#4a6e4a;align-self:flex-start;">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span data-lang="da">Altid opdateret kundedata</span>
+          <span data-lang="en" style="display:none">Always up-to-date customer data</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROCES
+════════════════════════════════════════════ -->
+<section id="proces" class="section-white py-24 md:py-32" aria-labelledby="process-heading">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="max-w-2xl mx-auto text-center mb-16 fade-up">
+      <h2 id="process-heading" class="text-3xl md:text-4xl font-bold text-warm-900 mb-4">
+        <span data-lang="da">Fra samtale til automation på få uger</span>
+        <span data-lang="en" style="display:none">From conversation to automation in weeks</span>
+      </h2>
+      <p class="text-warm-500 text-lg">
+        <span data-lang="da">En enkel, transparent proces — uden teknisk-snak og overraskende regninger.</span>
+        <span data-lang="en" style="display:none">A simple, transparent process — no jargon, no surprise invoices.</span>
+      </p>
+    </div>
+
+    <!-- Timeline wrapper: single line behind all circles -->
+    <div class="relative">
+
+      <!-- Continuous connector line (desktop only), centeret på cirklerne -->
+      <div class="hidden lg:block absolute" style="top:1.25rem;left:calc(12.5% - 0px);right:calc(12.5% - 0px);height:1px;background:linear-gradient(90deg,#8c5e3c,#c8a97e,#b88060,#6b8c6b);opacity:0.3;"></div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <!-- Step 1 -->
+        <div class="fade-up flex flex-col items-center text-center">
+          <div class="step-num text-white relative z-10 mb-5" style="background:#8c5e3c;">1</div>
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#f5ede0;">
+            <i data-lucide="message-square" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="font-bold text-warm-900 mb-2">
+            <span data-lang="da">Gratis afklaring</span>
+            <span data-lang="en" style="display:none">Free discovery</span>
+          </h3>
+          <p class="text-sm text-warm-500 leading-relaxed">
+            <span data-lang="da">Vi lytter til jeres hverdag og finder mulighederne</span>
+            <span data-lang="en" style="display:none">We listen to your day-to-day and find the opportunities</span>
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="fade-up flex flex-col items-center text-center" style="transition-delay:0.1s">
+          <div class="step-num text-white relative z-10 mb-5" style="background:#a07048;">2</div>
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#f5ede0;">
+            <i data-lucide="search" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="font-bold text-warm-900 mb-2">
+            <span data-lang="da">Analyse</span>
+            <span data-lang="en" style="display:none">Analysis</span>
+          </h3>
+          <p class="text-sm text-warm-500 leading-relaxed">
+            <span data-lang="da">Vi identificerer de opgaver der æder mest tid</span>
+            <span data-lang="en" style="display:none">We identify the tasks that consume the most time</span>
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="fade-up flex flex-col items-center text-center" style="transition-delay:0.2s">
+          <div class="step-num text-white relative z-10 mb-5" style="background:#b88060;">3</div>
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#f5ede0;">
+            <i data-lucide="code-2" class="w-5 h-5" style="color:#8c5e3c;"></i>
+          </div>
+          <h3 class="font-bold text-warm-900 mb-2">
+            <span data-lang="da">Implementering</span>
+            <span data-lang="en" style="display:none">Implementation</span>
+          </h3>
+          <p class="text-sm text-warm-500 leading-relaxed">
+            <span data-lang="da">Vi bygger og tester løsningen sammen med jer</span>
+            <span data-lang="en" style="display:none">We build and test the solution together with you</span>
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="fade-up flex flex-col items-center text-center" style="transition-delay:0.3s">
+          <div class="step-num text-white relative z-10 mb-5" style="background:#6b8c6b;">4</div>
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#eef4ee;">
+            <i data-lucide="shield" class="w-5 h-5" style="color:#4a6e4a;"></i>
+          </div>
+          <h3 class="font-bold text-warm-900 mb-2">
+            <span data-lang="da">Drift</span>
+            <span data-lang="en" style="display:none">Operations</span>
+          </h3>
+          <p class="text-sm text-warm-500 leading-relaxed">
+            <span data-lang="da">I sparer tid fra dag ét — vi holder øje med at det kører</span>
+            <span data-lang="en" style="display:none">You save time from day one — we keep watch to make sure it runs</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HVORFOR NORDAGENT (warm dark)
+════════════════════════════════════════════ -->
+<section class="section-dark wood-hint relative py-24 md:py-32" aria-labelledby="why-heading">
+  <div class="relative max-w-6xl mx-auto px-6">
+
+    <div class="max-w-2xl mx-auto text-center mb-16 fade-up">
+      <h2 id="why-heading" class="text-3xl md:text-4xl font-bold mb-4" style="color:#f0ece4;">
+        <span data-lang="da">Derfor vælger virksomheder Nordagent</span>
+        <span data-lang="en" style="display:none">Why businesses choose Nordagent</span>
+      </h2>
+      <p style="color:#a89888;" class="text-lg">
+        <span data-lang="da">Simpelt. Troværdigt. Dansk.</span>
+        <span data-lang="en" style="display:none">Simple. Trustworthy. Straightforward.</span>
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-5">
+
+      <div class="rounded-2xl border p-8 fade-up" style="background:rgba(255,255,255,0.05);border-color:rgba(200,169,126,0.18);">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style="background:rgba(200,169,126,0.15);">
+          <i data-lucide="shield-check" class="w-5 h-5" style="color:#c8a97e;"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2" style="color:#f0ece4;">
+          <span data-lang="da">Datahåndtering med omtanke</span>
+          <span data-lang="en" style="display:none">Data handled with care</span>
+        </h3>
+        <p class="text-sm leading-relaxed" style="color:#a89888;">
+          <span data-lang="da">Vi hjælper jer med at vælge de løsninger, der passer til jeres krav — og er altid transparente om, hvor og hvordan jeres data behandles.</span>
+          <span data-lang="en" style="display:none">We help you choose solutions that match your requirements — and we're always transparent about where and how your data is processed.</span>
+        </p>
+      </div>
+
+      <div class="rounded-2xl border p-8 fade-up" style="background:rgba(255,255,255,0.05);border-color:rgba(200,169,126,0.18);transition-delay:0.1s">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style="background:rgba(200,169,126,0.15);">
+          <i data-lucide="lock-open" class="w-5 h-5" style="color:#c8a97e;"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2" style="color:#f0ece4;">
+          <span data-lang="da">Bygget på open source</span>
+          <span data-lang="en" style="display:none">Built on open source</span>
+        </h3>
+        <p class="text-sm leading-relaxed" style="color:#a89888;">
+          <span data-lang="da">Vi bruger open source-teknologi, hvor det giver mening — det holder omkostningerne nede og giver jer fleksibilitet.</span>
+          <span data-lang="en" style="display:none">We use open-source technology where it makes sense — keeping costs down and giving you flexibility.</span>
+        </p>
+      </div>
+
+      <div class="rounded-2xl border p-8 fade-up" style="background:rgba(255,255,255,0.05);border-color:rgba(200,169,126,0.18);transition-delay:0.2s">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style="background:rgba(200,169,126,0.15);">
+          <i data-lucide="trending-up" class="w-5 h-5" style="color:#c8a97e;"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2" style="color:#f0ece4;">
+          <span data-lang="da">Resultater, ikke teknik-snak</span>
+          <span data-lang="en" style="display:none">Results, not buzzwords</span>
+        </h3>
+        <p class="text-sm leading-relaxed" style="color:#a89888;">
+          <span data-lang="da">Vi måler succes i den tid I sparer. Ikke i buzzwords eller fancy diagrammer.</span>
+          <span data-lang="en" style="display:none">We measure success by the time you save. Not by buzzwords or fancy diagrams.</span>
+        </p>
+      </div>
+
+      <div class="rounded-2xl border p-8 fade-up" style="background:rgba(255,255,255,0.05);border-color:rgba(200,169,126,0.18);transition-delay:0.3s">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style="background:rgba(200,169,126,0.15);">
+          <i data-lucide="message-circle-heart" class="w-5 h-5" style="color:#c8a97e;"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2" style="color:#f0ece4;">
+          <span data-lang="da">Dansk rådgivning og løbende support</span>
+          <span data-lang="en" style="display:none">Local expertise and ongoing support</span>
+        </h3>
+        <p class="text-sm leading-relaxed" style="color:#a89888;">
+          <span data-lang="da">Vi taler jeres sprog, forstår jeres hverdag — og vi er her også efter lanceringen. Vi tilbyder løbende vedligehold, så jeres automationer altid kører som de skal.</span>
+          <span data-lang="en" style="display:none">We speak your language, understand your day-to-day — and we're here after launch too. We offer ongoing maintenance so your automations always run as they should.</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     OM NORDAGENT
+════════════════════════════════════════════ -->
+<section id="om" class="section-cream py-24 md:py-32" aria-labelledby="about-heading">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="max-w-2xl mx-auto text-center mb-14 fade-up">
+      <span class="inline-block mb-6 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide" style="background:#f0ece4;color:#8a7a6a;">
+        <span data-lang="da">Om os</span>
+        <span data-lang="en" style="display:none">About</span>
+      </span>
+      <h2 id="about-heading" class="text-3xl md:text-4xl font-bold text-warm-900">
+        <span data-lang="da">Menneskerne bag Nordagent</span>
+        <span data-lang="en" style="display:none">The people behind Nordagent</span>
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+
+      <!-- Kristian -->
+      <div class="card p-8 flex flex-col items-center text-center fade-up">
+        <!-- Foto-placeholder med initialer -->
+        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-5 text-2xl font-bold shrink-0" style="background:#f0e8dc;color:#8c5e3c;border:2px solid #e0d0c0;">
+          KI
+        </div>
+        <h3 class="text-xl font-bold text-warm-900 mb-1">Kristian</h3>
+        <p class="text-sm font-medium mb-4" style="color:#8c5e3c;">
+          <span data-lang="da">CEO — Strategi &amp; Teknologi</span>
+          <span data-lang="en" style="display:none">CEO — Strategy &amp; Technology</span>
+        </p>
+        <p class="text-sm text-warm-500 leading-relaxed">
+          <span data-lang="da">Med baggrund i økonomi og IT bygger Kristian broen mellem forretning og teknologi. Han forstår jeres processer, taler begge sprog — og ved præcis hvor meget det koster ikke at automatisere.</span>
+          <span data-lang="en" style="display:none">With a background in finance and IT, Kristian bridges the gap between business and technology. He understands your processes, speaks both languages — and knows exactly how much it costs not to automate.</span>
+        </p>
+      </div>
+
+      <!-- Mads -->
+      <div class="card p-8 flex flex-col items-center text-center fade-up" style="transition-delay:0.1s">
+        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-5 text-2xl font-bold shrink-0" style="background:#f0e8dc;color:#8c5e3c;border:2px solid #e0d0c0;">
+          MA
+        </div>
+        <h3 class="text-xl font-bold text-warm-900 mb-1">Mads</h3>
+        <p class="text-sm font-medium mb-4" style="color:#8c5e3c;">
+          <span data-lang="da">CSO — Salg &amp; Kunderelationer</span>
+          <span data-lang="en" style="display:none">CSO — Sales &amp; Client Relations</span>
+        </p>
+        <p class="text-sm text-warm-500 leading-relaxed">
+          <span data-lang="da">Mads sørger for, at de rigtige virksomheder finder Nordagent — og at samarbejdet starter på det rigtige fundament. Han forstår jeres udfordringer, før teknikken overhovedet kommer på bordet.</span>
+          <span data-lang="en" style="display:none">Mads makes sure the right businesses find Nordagent — and that every partnership starts on the right foundation. He understands your challenges before the technology even enters the conversation.</span>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     KONTAKT
+════════════════════════════════════════════ -->
+<section id="kontakt" class="section-white py-24 md:py-32" aria-labelledby="contact-heading">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="max-w-xl mx-auto">
+
+      <div class="text-center mb-12 fade-up">
+        <h2 id="contact-heading" class="text-3xl md:text-4xl font-bold text-warm-900 mb-4">
+          <span data-lang="da">Lad os tage en snak</span>
+          <span data-lang="en" style="display:none">Let's talk</span>
+        </h2>
+        <p class="text-lg text-warm-500 mb-4">
+          <span data-lang="da">Skriv til os — det koster ikke noget at høre, hvad der er muligt.</span>
+          <span data-lang="en" style="display:none">Drop us a line — there's no cost to finding out what's possible.</span>
+        </p>
+        <a href="mailto:hej@nordagent.dk" class="inline-flex items-center gap-2 font-medium transition-colors" style="color:#8c5e3c;" onmouseover="this.style.color='#6e4830'" onmouseout="this.style.color='#8c5e3c'">
+          <i data-lucide="mail" class="w-4 h-4"></i>
+          hej@nordagent.dk
+        </a>
+      </div>
+
+      <!-- Form -->
+      <div class="card p-8 fade-up">
+        <form action="mailto:hej@nordagent.dk" method="post" enctype="text/plain" aria-label="Kontaktformular">
+          <div class="space-y-5">
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="f-name" class="block text-sm font-medium text-warm-700 mb-1.5">
+                  <span data-lang="da">Navn</span>
+                  <span data-lang="en" style="display:none">Name</span>
+                </label>
+                <input id="f-name" name="navn" type="text" class="form-input" autocomplete="name" required
+                  placeholder="">
+                <script>
+                  document.getElementById('f-name').addEventListener('focus', function(){});
+                </script>
+              </div>
+              <div>
+                <label for="f-email" class="block text-sm font-medium text-warm-700 mb-1.5">Email</label>
+                <input id="f-email" name="email" type="email" class="form-input" autocomplete="email" required placeholder="din@email.dk" />
+              </div>
+            </div>
+            <div>
+              <label for="f-company" class="block text-sm font-medium text-warm-700 mb-1.5">
+                <span data-lang="da">Virksomhed</span>
+                <span data-lang="en" style="display:none">Company</span>
+              </label>
+              <input id="f-company" name="virksomhed" type="text" class="form-input" autocomplete="organization" />
+            </div>
+            <div>
+              <label for="f-message" class="block text-sm font-medium text-warm-700 mb-1.5">
+                <span data-lang="da">Besked</span>
+                <span data-lang="en" style="display:none">Message</span>
+              </label>
+              <textarea id="f-message" name="besked" rows="4" class="form-input resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-colors focus:outline-none focus:ring-2 focus:ring-sand focus:ring-offset-2" style="background:#8c5e3c;" onmouseover="this.style.background='#7a5030'" onmouseout="this.style.background='#8c5e3c'">
+              <span data-lang="da">Send besked</span>
+              <span data-lang="en" style="display:none">Send message</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer style="background:#2e2420;color:#a89888;" role="contentinfo">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+
+      <!-- Logo -->
+      <div>
+        <div class="text-xl font-bold mb-2" style="color:#f0ece4;">
+          Nord<span style="color:#c8a97e;">agent</span>
+        </div>
+        <p class="text-sm" style="color:#6e6054;">
+          <span data-lang="da">AI-automationer der sparer jer tid</span>
+          <span data-lang="en" style="display:none">AI automation that saves you time</span>
+        </p>
+      </div>
+
+      <!-- Footer links -->
+      <div class="flex flex-wrap gap-6 text-sm">
+        <a href="#ydelser" class="hover:text-warm-100 transition-colors" style="color:#a89888;">
+          <span data-lang="da">Ydelser</span><span data-lang="en" style="display:none">Services</span>
+        </a>
+        <a href="#eksempler" class="hover:text-warm-100 transition-colors" style="color:#a89888;">
+          <span data-lang="da">Eksempler</span><span data-lang="en" style="display:none">Examples</span>
+        </a>
+        <a href="#om" class="hover:text-warm-100 transition-colors" style="color:#a89888;">
+          <span data-lang="da">Om os</span><span data-lang="en" style="display:none">About</span>
+        </a>
+        <a href="#kontakt" class="hover:text-warm-100 transition-colors" style="color:#a89888;">
+          <span data-lang="da">Kontakt</span><span data-lang="en" style="display:none">Contact</span>
+        </a>
+        <a href="#" class="hover:text-warm-100 transition-colors" style="color:#a89888;">
+          <span data-lang="da">Privatlivspolitik</span><span data-lang="en" style="display:none">Privacy policy</span>
+        </a>
+      </div>
+
+      <!-- Lang + CVR -->
+      <div class="flex flex-col items-start md:items-end gap-3">
+        <div class="flex items-center gap-2 text-sm" role="group" aria-label="Sprogvalg">
+          <button onclick="setLanguage('da')" id="footer-btn-da" class="lang-active-light transition-colors">DA</button>
+          <span style="color:#4a3830;">|</span>
+          <button onclick="setLanguage('en')" id="footer-btn-en" class="lang-inactive-light transition-colors">EN</button>
+        </div>
+        <p class="text-xs" style="color:#4a3830;">CVR: XX XX XX XX</p>
+      </div>
+
+    </div>
+
+    <div class="mt-10 pt-8 text-xs text-center" style="color:#4a3830;border-top:1px solid rgba(255,255,255,0.06);">
+      © 2025 Nordagent.
+      <span data-lang="da">Alle rettigheder forbeholdes.</span>
+      <span data-lang="en" style="display:none">All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════ -->
+<script>
+  // ── Language switcher ─────────────────────
+  // Exactly as specified: toggle display on all [data-lang] elements
+  function setLanguage(lang) {
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.style.display = el.dataset.lang === lang ? '' : 'none';
+    });
+
+    // Update nav button states
+    const pairs = [
+      ['btn-da', 'btn-en'],
+      ['mob-btn-da', 'mob-btn-en'],
+      ['footer-btn-da', 'footer-btn-en'],
+    ];
+
+    pairs.forEach(([daId, enId]) => {
+      const da = document.getElementById(daId);
+      const en = document.getElementById(enId);
+      if (!da || !en) return;
+
+      const isFooter = daId.startsWith('footer');
+      const activeClass   = isFooter ? 'lang-active-light'   : 'lang-active';
+      const inactiveClass = isFooter ? 'lang-inactive-light'  : 'lang-inactive';
+
+      if (lang === 'da') {
+        da.className = activeClass + ' transition-colors';
+        en.className = inactiveClass + ' transition-colors';
+        da.setAttribute('aria-pressed', 'true');
+        en.setAttribute('aria-pressed', 'false');
+      } else {
+        en.className = activeClass + ' transition-colors';
+        da.className = inactiveClass + ' transition-colors';
+        en.setAttribute('aria-pressed', 'true');
+        da.setAttribute('aria-pressed', 'false');
+      }
+    });
+
+    localStorage.setItem('nordagent-lang', lang);
+    document.documentElement.lang = lang;
+  }
+
+  // ── Mobile menu ───────────────────────────
+  const toggle = document.getElementById('mobile-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  toggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.contains('open');
+    mobileMenu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+
+  document.addEventListener('click', e => {
+    if (!toggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // ── Scroll animations ─────────────────────
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── Sticky nav shadow ─────────────────────
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    nav.style.boxShadow = window.scrollY > 20
+      ? '0 2px 24px rgba(46,36,32,0.08)'
+      : 'none';
+  }, { passive: true });
+
+  // ── Init ──────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('nordagent-lang') || 'da';
+    setLanguage(saved);
+    lucide.createIcons();
+  });
+</script>
+
+</body>
+</html>
