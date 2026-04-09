@@ -3,8 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nordagent — AI-automationer der sparer jer tid</title>
-  <meta name="description" content="Nordagent bygger intelligente automationer og AI-agenter til danske virksomheder." />
+
+  <!-- Primary meta -->
+  <title>Nordagent — AI-automatisering for danske virksomheder</title>
+  <meta name="description" content="Nordagent hjælper små og mellemstore virksomheder med at automatisere gentagne opgaver med AI-agenter og intelligente workflows. Spar tid og penge." />
+  <meta name="keywords" content="automatisering, AI-agent, workflow, n8n, dansk, SMV, GDPR, CRM, bogføring, kundeservice" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://krille-12.github.io/Nordagent/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Nordagent" />
+  <meta property="og:title" content="Nordagent — AI-automatisering for danske virksomheder" />
+  <meta property="og:description" content="Nordagent hjælper små og mellemstore virksomheder med at automatisere gentagne opgaver med AI-agenter og intelligente workflows. Spar tid og penge." />
+  <meta property="og:url" content="https://krille-12.github.io/Nordagent/" />
+  <meta property="og:locale" content="da_DK" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nordagent — AI-automatisering for danske virksomheder" />
+  <meta name="twitter:description" content="Nordagent hjælper små og mellemstore virksomheder med at automatisere gentagne opgaver med AI-agenter og intelligente workflows. Spar tid og penge." />
+
+  <!-- Structured data: Organization + LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://krille-12.github.io/Nordagent/#organization",
+        "name": "Nordagent",
+        "url": "https://krille-12.github.io/Nordagent/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://krille-12.github.io/Nordagent/logo.png"
+        },
+        "description": "Nordagent bygger intelligente automationer og AI-agenter der overtager gentagne opgaver for små og mellemstore danske virksomheder.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "kontakt@nordagent.dk",
+          "contactType": "customer service",
+          "availableLanguage": ["Danish", "English"]
+        }
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://krille-12.github.io/Nordagent/#localbusiness",
+        "name": "Nordagent",
+        "url": "https://krille-12.github.io/Nordagent/",
+        "email": "kontakt@nordagent.dk",
+        "description": "AI-automatisering og intelligente workflows til danske SMV'er.",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Denmark"
+        },
+        "priceRange": "$$",
+        "knowsLanguage": ["da", "en"]
+      },
+      {
+        "@type": "Service",
+        "serviceType": "Fakturaautomatisering",
+        "name": "Den automatiske bogholder",
+        "description": "AI-agent der læser fakturaer, bogfører beløb og CVR-numre automatisk og sender notifikationer ved afvigelser.",
+        "provider": { "@id": "https://krille-12.github.io/Nordagent/#organization" }
+      },
+      {
+        "@type": "Service",
+        "serviceType": "Kundeservice-automatisering",
+        "name": "Den intelligente kundeservice-agent",
+        "description": "AI-agent der klassificerer indgående emails som reklamation, spørgsmål eller bestilling og router dem til rette modtager med foreslået svar.",
+        "provider": { "@id": "https://krille-12.github.io/Nordagent/#organization" }
+      },
+      {
+        "@type": "Service",
+        "serviceType": "CRM-automatisering",
+        "name": "Selvkørende CRM-opfølgning",
+        "description": "Automatisk velkomstmail, sælger-påmindelser og realtids-status i CRM ved oprettelse af nye kunder.",
+        "provider": { "@id": "https://krille-12.github.io/Nordagent/#organization" }
+      },
+      {
+        "@type": "Service",
+        "serviceType": "Databerigelse",
+        "name": "Datatjek på autopilot",
+        "description": "Automatisk CVR-opslag, validering af kundeaktivitet og berigelse af kundedata uden manuel indsats.",
+        "provider": { "@id": "https://krille-12.github.io/Nordagent/#organization" }
+      }
+    ]
+  }
+  </script>
 
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1007,6 +1093,10 @@
     const saved = localStorage.getItem('nordagent-lang') || 'da';
     setLanguage(saved);
     lucide.createIcons();
+    // Dekorative ikoner skjules for skærmlæsere
+    document.querySelectorAll('i[data-lucide]').forEach(el => {
+      el.setAttribute('aria-hidden', 'true');
+    });
   });
 </script>
 
