@@ -4,13 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F41EJ83RDL"></script>
+  <!-- Google Analytics — loades kun ved samtykke -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-F41EJ83RDL');
+    function loadGA() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-F41EJ83RDL';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function(){ dataLayer.push(arguments); };
+      gtag('js', new Date());
+      gtag('config', 'G-F41EJ83RDL');
+    }
+    if (localStorage.getItem('nordagent_cookies') === 'accepted') { loadGA(); }
   </script>
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
@@ -199,6 +205,45 @@
     </div>
   </div>
 </footer>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#2e2420;border-top:1px solid rgba(200,169,126,0.2);">
+  <div style="max-width:72rem;margin:0 auto;padding:1rem 1.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
+    <p style="color:#a89888;font-size:0.875rem;line-height:1.6;margin:0;flex:1;min-width:200px;">
+      Vi bruger cookies til at forstå, hvordan besøgende bruger sitet (Google Analytics).
+      <a href="/privatlivspolitik.html" style="color:#c8a97e;text-decoration:underline;">Læs mere</a>
+    </p>
+    <div style="display:flex;gap:0.75rem;flex-shrink:0;">
+      <button onclick="declineCookies()" style="padding:0.5rem 1.25rem;border-radius:0.5rem;font-size:0.875rem;font-weight:500;color:#a89888;background:transparent;border:1px solid rgba(200,169,126,0.3);cursor:pointer;font-family:inherit;">Afvis</button>
+      <button onclick="acceptCookies()" style="padding:0.5rem 1.25rem;border-radius:0.5rem;font-size:0.875rem;font-weight:600;color:#fff;background:#8c5e3c;border:none;cursor:pointer;font-family:inherit;">Acceptér</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadGA() {
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-F41EJ83RDL';
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-F41EJ83RDL');
+  }
+  function acceptCookies() {
+    localStorage.setItem('nordagent_cookies', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+    loadGA();
+  }
+  function declineCookies() {
+    localStorage.setItem('nordagent_cookies', 'declined');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+  if (!localStorage.getItem('nordagent_cookies')) {
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+</script>
 
 </body>
 </html>
