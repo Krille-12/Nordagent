@@ -1225,6 +1225,20 @@
 
     localStorage.setItem('nordagent-lang', lang);
     document.documentElement.lang = lang;
+
+    // Opdater URL og canonical så Google kan indeksere begge sprogversioner
+    const url = new URL(window.location.href);
+    if (lang === 'en') {
+      url.searchParams.set('lang', 'en');
+    } else {
+      url.searchParams.delete('lang');
+    }
+    history.replaceState(null, '', url.toString());
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.href = lang === 'en' ? 'https://nordagent.dk?lang=en' : 'https://nordagent.dk';
+    }
   }
 
   // ── Mobile menu ───────────────────────────
@@ -1267,7 +1281,9 @@
 
   // ── Init ──────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem('nordagent-lang') || 'da';
+    // URL-parameter har prioritet over localStorage (vigtigt for Google-indeksering)
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    const saved = urlLang || localStorage.getItem('nordagent-lang') || 'da';
     setLanguage(saved);
     lucide.createIcons();
     // Dekorative ikoner skjules for skærmlæsere
