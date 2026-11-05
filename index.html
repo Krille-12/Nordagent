@@ -201,7 +201,7 @@ p{max-width:62ch}
 .nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
 .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.14em;text-decoration:none;font-size:14px;min-height:44px}
-.brand .mono{width:34px;height:34px;border-radius:9px;background:var(--dark);color:var(--bg);display:grid;place-items:center;font-family:var(--serif);font-size:16px;letter-spacing:0}
+.brand .mono{width:44px;height:auto;display:block}
 .nav ul{display:flex;gap:4px;list-style:none;align-items:center}
 .nav li a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;text-decoration:none;color:var(--ink-2);font-size:15px;border-radius:8px}
 .nav li a:hover{color:var(--ink);background:var(--bg-2)}
@@ -340,6 +340,8 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
 .draw.in{stroke-dashoffset:0}
 @media (prefers-reduced-motion:reduce){.draw{stroke-dashoffset:0;transition:none}}
 
+.fbrand{display:flex;align-items:center;gap:10px}.fbrand strong{letter-spacing:.14em;color:var(--ink)}
+
 /* nav extras */
 .navright{display:flex;align-items:center;gap:14px}
 .lang{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--ink-2)}
@@ -371,7 +373,7 @@ footer .lang button{min-height:44px}
 
 <header class="nav" id="navbar">
   <div class="wrap">
-    <a class="brand" href="#"><span class="mono">NA</span>NORDAGENT</a>
+    <a class="brand" href="#"><img class="mono" src="/na-monogram.png" alt="" width="44" height="25">NORDAGENT</a>
     <ul class="links">
       <li><a href="#rejsen" data-i18n="nav.journey">Rejsen</a></li>
       <li><a href="#find" data-i18n="nav.find">Find jeres stop</a></li>
@@ -631,7 +633,7 @@ footer .lang button{min-height:44px}
 
 <footer>
   <div class="wrap">
-    <div><strong style="letter-spacing:.14em;color:var(--ink)">NORDAGENT</strong> ApS · <span data-i18n="ft.cvr">CVR følger</span></div>
+    <div class="fbrand"><img src="/na-monogram.png" alt="" width="36" height="20"><strong>NORDAGENT</strong> ApS · <span data-i18n="ft.cvr">CVR følger</span></div>
     <ul>
       <li><a href="#rejsen" data-i18n="nav.journey">Rejsen</a></li><li><a href="#om-os" data-i18n="nav.about">Om os</a></li><li><a href="mailto:kontakt@nordagent.dk">kontakt@nordagent.dk</a></li><li><a href="/privatlivspolitik.html" data-i18n="ft.privacy">Privatlivspolitik</a></li>
       <li><div class="lang" role="group" aria-label="Sprog / Language"><button type="button" id="footer-btn-da" aria-pressed="true" onclick="setLanguage('da')">DA</button><span aria-hidden="true">/</span><button type="button" id="footer-btn-en" aria-pressed="false" onclick="setLanguage('en')">EN</button></div></li>
