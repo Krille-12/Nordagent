@@ -107,7 +107,7 @@ document.documentElement.classList.add('js');
    "@type": "Service",
    "serviceType": "AI Agents",
    "name": "AI-agenter til virksomheder",
-   "description": "Digitale hjælpere, der kan læse, forstå, undersøge, skrive og behandle information for virksomheden. En medarbejder godkender resultatet.",
+   "description": "AI-agenter, der læser mails og dokumenter, forstår, hvad de handler om, og skriver et udkast. En medarbejder godkender resultatet.",
    "provider": {
     "@id": "https://nordagent.dk/#organization"
    }
@@ -116,7 +116,7 @@ document.documentElement.classList.add('js');
    "@type": "Service",
    "serviceType": "Workflow Automation",
    "name": "Automatiserede workflows",
-   "description": "Arbejdsgange, der forbinder virksomhedens systemer og automatisk flytter information og udfører handlinger.",
+   "description": "Arbejdsgange, der selv flytter oplysninger fra ét system til et andet, fx fra en mail til økonomisystemet.",
    "provider": {
     "@id": "https://nordagent.dk/#organization"
    }
@@ -129,7 +129,7 @@ document.documentElement.classList.add('js');
      "name": "Hvad hvis agenten laver fejl?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Agenter sættes op med godkendelsestrin: de gør arbejdet, og I godkender det sidste klik, indtil tilliden er bygget op. Alt logges, så I altid kan se, hvad der er sket, og hvorfor."
+      "text": "Vi sætter agenten op, så den gør arbejdet, og I godkender, før noget bliver sendt eller bogført. Sådan fortsætter det, til I stoler på den. Alt bliver skrevet i en log, så I kan se, hvad den har gjort og hvorfor."
      }
     },
     {
@@ -137,7 +137,7 @@ document.documentElement.classList.add('js');
      "name": "Hvad med GDPR og vores data?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Serverne står i Tyskland, og AI-behandlingen sker i AWS' EU-regioner. Vi indgår en databehandleraftale med jer og sender kun de oplysninger til AI-modellen, som opgaven kræver. Jeres data bruges kun til jeres løsning."
+      "text": "Serverne står i Tyskland, og AI-behandlingen sker i AWS' EU-regioner. Vi indgår en databehandleraftale med jer og sender kun de oplysninger til AI-modellen, som opgaven kræver. Vi bruger kun jeres data til jeres egen løsning."
      }
     },
     {
@@ -145,7 +145,7 @@ document.documentElement.classList.add('js');
      "name": "Vi bruger allerede ChatGPT eller Copilot. Er det ikke nok?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Det er en god start, og til nogle opgaver er det nok. Men så længe en medarbejder skal kopiere tekst ind og ud, ligger arbejdet der stadig. Gevinsten ved automatisering kommer, når systemerne begynder at udveksle oplysninger selv."
+      "text": "Det er en god start, og til nogle opgaver er det nok. Men så længe en medarbejder skal kopiere tekst ind og ud, ligger arbejdet der stadig. En automatisering henter og afleverer selv oplysningerne i jeres systemer, så ingen skal kopiere."
      }
     },
     {
@@ -153,7 +153,7 @@ document.documentElement.classList.add('js');
      "name": "Hvor lang tid tager det?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Vi starter altid med det mindste skridt, der giver mærkbar værdi. En opsætning tager dage, et første workflow typisk få uger."
+      "text": "Vi begynder med én lille opgave, som I kan mærke i hverdagen. En opsætning tager nogle dage, og den første arbejdsgang tager typisk få uger."
      }
     },
     {
@@ -161,7 +161,7 @@ document.documentElement.classList.add('js');
      "name": "Hvad koster det?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "I får en fast pris, før vi går i gang, aftalt efter den første snak. Ingen timeafregning og ingen overraskende regninger."
+      "text": "I får en fast pris efter den første snak, før vi går i gang. Vi afregner ikke pr. time, så prisen ændrer sig ikke undervejs."
      }
     }
    ]
@@ -254,74 +254,77 @@ section{padding:clamp(64px,9vw,120px) 0}
 .hero .small{margin-top:18px;font-size:14.5px;color:var(--ink-2)}
 @media (max-width:980px){.hero .wrap{grid-template-columns:minmax(0,1fr)}}
 
-/* stage: den animerede arbejdsgang */
-.stage{background:var(--dark);color:var(--on-dark);border-radius:26px;padding:clamp(16px,2.2vw,26px);box-shadow:0 34px 70px -38px rgba(42,33,27,.6),0 2px 0 0 rgba(255,255,255,.04) inset}
-.stage-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;min-height:44px}
-.status{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;color:var(--bg)}
+/* stage: fakturaen, der går fra Outlook til økonomisystemet */
+.stage{background:var(--dark);color:var(--on-dark);border-radius:26px;padding:clamp(14px,2vw,22px);box-shadow:0 34px 70px -38px rgba(42,33,27,.6),0 2px 0 0 rgba(255,255,255,.04) inset}
+.stage-top{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px}
+.status{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;line-height:1.3;color:var(--bg)}
 .led{width:9px;height:9px;border-radius:50%;background:var(--gold);flex:none;position:relative}
 .led::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--gold);animation:led 1.9s var(--ease) infinite}
 @keyframes led{0%{transform:scale(1);opacity:.55}100%{transform:scale(3.2);opacity:0}}
 .stage.done .led::after,.stage.paused .led::after{animation:none;opacity:0}
+.stage-ctl{display:flex;align-items:center;gap:12px;flex:none}
+.stage-count{font-size:12.5px;font-weight:600;color:var(--on-dark-2);font-variant-numeric:tabular-nums;white-space:nowrap}
 .iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--dark-line);background:transparent;color:var(--on-dark);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
 .iconbtn:hover{background:var(--dark-2);border-color:#6a5a4e}
 .iconbtn .i-play{display:none}.stage.paused .iconbtn .i-play{display:block}.stage.paused .iconbtn .i-pause{display:none}
-.stage-body{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);gap:clamp(16px,2vw,24px);align-items:start}
-.desk{display:grid;gap:12px;min-width:0}
-.desk>*{min-width:0}
-.sheet{background:var(--bg);color:var(--ink);border-radius:14px;padding:14px 16px 16px;position:relative;overflow:hidden;box-shadow:0 14px 30px -18px rgba(0,0,0,.6);transition:opacity .5s var(--ease),transform .7s var(--ease)}
-.mailbar{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--ink-2);padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--line)}
-.mailbar svg{flex:none}
-.mailbar span{white-space:nowrap}
+.rail{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0 14px}
+.rail li{height:4px;border-radius:2px;background:var(--gold);transition:background .5s var(--ease)}
 .tag{display:inline-flex;align-items:center;min-height:22px;padding:0 9px;border-radius:999px;background:var(--bg-2);font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
-.mailbar .tag{margin-left:auto}
-.sheet-h{font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.1;letter-spacing:-.015em;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.sheet-h small{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink-2);letter-spacing:0}
-.flds{display:grid;gap:6px;margin-top:12px}
-.fld{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;padding:6px 8px;margin:0 -8px;border-radius:8px;transition:background .5s var(--ease),box-shadow .5s var(--ease)}
-.fld dt{color:var(--ink-2)}
-.fld dd{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
-.skel{display:grid;gap:7px;margin-top:12px}
-.skel i{display:block;height:7px;border-radius:4px;background:var(--line)}
-.skel i:nth-child(2){width:72%}.skel i:nth-child(3){width:46%}
-.scan{position:absolute;left:0;right:0;top:0;height:44px;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--accent) 18%,transparent));border-bottom:2px solid var(--accent);opacity:0;pointer-events:none}
-.draft{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:14px;padding:12px 14px;position:relative;min-height:66px;transition:background .5s var(--ease),border-color .5s var(--ease)}
-.draft-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 12px;transition:opacity .5s var(--ease),transform .7s var(--ease)}
-.slot{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--on-dark-2);opacity:0;transition:opacity .4s var(--ease);pointer-events:none}
-.draft .t{font-size:12px;color:var(--on-dark-2);font-weight:600}
-.draft .v{font-size:13.5px;color:var(--bg);font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
-.ok{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 13px;border-radius:999px;background:var(--gold);color:var(--dark);font-size:13px;font-weight:600;white-space:nowrap;position:relative;transition:background .3s,transform .25s var(--ease)}
-.ok svg{display:block}
+.pipe{display:grid}
+.stn{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:16px;padding:11px 13px 13px;transition:border-color .45s var(--ease),box-shadow .45s var(--ease)}
+.stn-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;min-height:24px}
+.stn-n{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--bg)}
+.stn-n svg{color:var(--gold);flex:none}
+.pill{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:rgba(216,180,142,.14);color:var(--gold);white-space:nowrap;transition:background .3s,color .3s}
+.stn-b{position:relative}
+.wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border:1px dashed var(--dark-line);border-radius:10px;font-size:12.5px;font-weight:500;color:var(--on-dark-2);opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.link{width:2px;height:16px;margin-left:27px;background:var(--dark-line);position:relative}
+.link::after{content:"";position:absolute;inset:0;background:var(--gold);transform-origin:top;transition:transform .6s var(--ease)}
+.mrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 12px;font-size:13px;line-height:1.3;transition:opacity .5s var(--ease),transform .7s var(--ease)}
+.mrow .un{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.mrow b{font-weight:600;display:block}
+.mrow .sj{color:var(--ink-2);font-size:12.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.read{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:10px;align-items:stretch}
+.doc{background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px 12px;position:relative;overflow:hidden;font-size:12px;line-height:1.3;display:grid;gap:5px;align-content:start;transition:opacity .5s var(--ease),transform .7s var(--ease)}
+.doc-h{font-family:var(--serif);font-weight:500;font-size:1.05rem;display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:2px}
+.doc-h small{font-family:var(--sans);font-size:11px;color:var(--ink-2)}
+.doc p{max-width:none;font-weight:600;padding:2px 6px;margin:0 -6px;border-radius:5px;transition:background .5s var(--ease)}
+.doc i{display:block;height:5px;border-radius:3px;background:var(--line);width:78%}
+.doc i.s{width:52%}
+.scan{position:absolute;left:0;right:0;top:0;height:36px;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--accent) 18%,transparent));border-bottom:2px solid var(--accent);opacity:0;pointer-events:none}
+.found{display:grid;gap:6px;align-content:start}
+.fd{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid var(--dark-line);border-radius:9px;padding:6px 10px;font-size:12.5px;line-height:1.3;background:rgba(250,248,245,.05);transition:border-color .4s,background .4s}
+.fd dt{color:var(--on-dark-2)}
+.fd dd{color:var(--bg);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;transition:opacity .45s var(--ease),transform .6s var(--ease)}
+.draft-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;transition:opacity .5s var(--ease),transform .7s var(--ease)}
+.draft-in .t{font-size:12px;color:var(--ink-2);font-weight:500}
+.draft-in .v{font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:1px}
+.ok{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:0 13px;border-radius:999px;background:var(--accent);color:var(--bg);font-size:13px;font-weight:600;white-space:nowrap;transition:background .3s,transform .25s var(--ease),box-shadow .3s}
 .ok .l-wait{display:none}
-
-.steps{list-style:none;display:grid;gap:0;counter-reset:s}
-.steps li{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:18px;font-size:14.5px;line-height:1.35;color:var(--bg);transition:color .4s}
-.steps li:last-child{padding-bottom:0}
-.steps li::before{content:"";position:absolute;left:12px;top:26px;bottom:0;width:2px;background:var(--gold);transform-origin:top;transition:transform .7s var(--ease),background .4s}
-.steps li:last-child::before{display:none}
-.dot{width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--dark);display:grid;place-items:center;flex:none;position:relative;z-index:1;transition:background .35s,box-shadow .35s,color .35s}
-.dot svg{transition:opacity .3s,transform .5s var(--ease)}
-.steps li span.tx{padding-top:3px}
-.stage-foot{margin-top:16px;font-size:12.5px;color:var(--on-dark-2)}
+.stage-foot{margin-top:12px;font-size:12.5px;color:var(--on-dark-2)}
 
 /* tilstande, kun når scriptet kører (uden script vises slutbilledet) */
-.stage.live .sheet:not(.on){opacity:0;transform:translateY(-16px) scale(.97)}
-.stage.live .draft:not(.on){background:transparent;border-style:dashed}
-.stage.live .draft:not(.on) .draft-in{opacity:0;transform:translateY(-12px)}
-.stage.live .draft:not(.on) .slot{opacity:1}
-.stage.live .fld.on{background:var(--mark);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent) inset}
-.stage.live .fld:nth-child(2){transition-delay:.18s}.stage.live .fld:nth-child(3){transition-delay:.36s}
+.stage.live .rail li:not(.done):not(.now){background:var(--dark-line)}
+.stage.live .stn.act{border-color:var(--gold);box-shadow:0 0 0 4px rgba(216,180,142,.12)}
+.stage.live .stn.idle .pill{background:transparent;color:var(--on-dark-2);box-shadow:0 0 0 1px var(--dark-line) inset}
+.stage.live .stn.idle .wait{opacity:1}
+.stage.live .mrow:not(.on){opacity:0;transform:translateY(-14px)}
+.stage.live .doc:not(.on){opacity:0;transform:translateY(-10px)}
+.stage.live .stn.idle .found{opacity:0}
+.stage.live .doc p.on{background:var(--mark)}
+.stage.live .doc p:nth-of-type(2){transition-delay:.18s}.stage.live .doc p:nth-of-type(3){transition-delay:.36s}
+.stage.live .fd:not(.on){border-style:dashed;background:transparent}
+.stage.live .fd:not(.on) dd{opacity:0;transform:translateX(-8px)}
+.stage.live .fd:nth-child(2),.stage.live .fd:nth-child(2) dd{transition-delay:.18s}.stage.live .fd:nth-child(3),.stage.live .fd:nth-child(3) dd{transition-delay:.36s}
 .stage.live.scanning .scan{opacity:1;animation:scan 1.7s var(--ease) both}
-@keyframes scan{0%{transform:translateY(-44px)}100%{transform:translateY(240px)}}
-.stage.live .steps li:not(.done):not(.now){color:var(--on-dark-2)}
-.stage.live .steps li:not(.done)::before{background:var(--dark-line);transform:scaleY(1)}
-.stage.live .steps li:not(.done) .dot{background:transparent;box-shadow:0 0 0 2px var(--dark-line) inset;color:transparent}
-.stage.live .steps li:not(.done) .dot svg{opacity:0;transform:scale(.4)}
-.stage.live .steps li.now .dot{box-shadow:0 0 0 2px var(--gold) inset,0 0 0 6px rgba(216,180,142,.16)}
-.stage.live .ok:not(.yes){background:transparent;color:var(--bg);box-shadow:0 0 0 1.5px var(--gold) inset}
+@keyframes scan{0%{transform:translateY(-36px)}100%{transform:translateY(150px)}}
+.stage.live .link:not(.on)::after{transform:scaleY(0)}
+.stage.live .draft-in:not(.on){opacity:0;transform:translateY(-10px)}
+.stage.live .ok:not(.yes){background:transparent;color:var(--accent-ink);box-shadow:0 0 0 1.5px var(--accent) inset}
 .stage.live .ok:not(.yes) svg,.stage.live .ok:not(.yes) .l-done{display:none}
 .stage.live .ok:not(.yes) .l-wait{display:inline}
-.stage.live .ok.press{transform:scale(.94)}
-@media (max-width:560px){.stage-body{grid-template-columns:1fr}}
+.stage.live .ok.press{transform:scale(.93);background:var(--mark)}
+@media (max-width:400px){.read{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.led::after{animation:none;opacity:0}.stage *{transition:none!important}.iconbtn{display:none}}
 
 /* chips */
@@ -378,89 +381,123 @@ section{padding:clamp(64px,9vw,120px) 0}
 .node b{width:64px;height:64px;border-radius:17px;box-shadow:0 14px 28px -22px rgba(42,33,27,.45);background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;color:var(--accent)}
 @media (max-width:820px){.duo{grid-template-columns:1fr}}
 
-/* eksempler */
-.ex{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,22px)}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:0 0 26px;overflow:hidden;display:flex;flex-direction:column;transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .3s}
-.card:hover{transform:translateY(-4px);box-shadow:0 24px 44px -30px rgba(42,33,27,.4);border-color:#D6CABC}
-.mini{background:var(--bg);border-bottom:1px solid var(--line);height:168px;padding:20px 22px;display:grid;align-content:center;gap:8px;overflow:hidden;font-size:12.5px}
-.card h3{margin:22px 24px 0;font-size:1.3rem}
-.card p{margin:8px 24px 0;color:var(--ink-2);font-size:16px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-weight:500;transition:transform .5s var(--ease),border-color .3s}
-.row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row .tag{background:var(--mark);color:var(--accent-ink);transition:background .3s,color .3s}
-.row .tag.no{background:var(--bg-2);color:var(--ink-2)}
-.card:hover .row:nth-child(1){transform:translateX(4px)}
-.card:hover .row:nth-child(2){transform:translateX(8px)}
-.card:hover .row:nth-child(3){transform:translateX(12px)}
-.card:hover .row .tag:not(.no){background:var(--accent);color:var(--bg)}
-.m-inv{background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:10px 12px;display:grid;gap:5px}
-.m-inv div{display:flex;justify-content:space-between;gap:10px;padding:3px 6px;margin:0 -6px;border-radius:6px;transition:background .4s var(--ease)}
-.m-inv div span{color:var(--ink-2)}.m-inv div b{font-weight:600;font-variant-numeric:tabular-nums}
-.card:hover .m-inv div{background:var(--mark)}
-.card:hover .m-inv div:nth-child(2){transition-delay:.1s}.card:hover .m-inv div:nth-child(3){transition-delay:.2s}
-.m-crm{background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:10px 12px;display:grid;gap:7px}
-.m-crm .nm{display:flex;align-items:center;gap:8px;font-weight:600}
-.m-crm .nm i{width:22px;height:22px;border-radius:50%;background:var(--bg-2);display:block}
-.m-crm div.f{display:flex;justify-content:space-between;gap:10px;color:var(--ink-2)}
-.m-crm div.f b{color:var(--ink);font-weight:600;display:inline-flex;align-items:center;gap:5px}
-.m-crm svg{color:var(--accent);transition:transform .5s var(--ease)}
-.card:hover .m-crm svg{transform:scale(1.25)}
-.m-cal{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.m-cal div{background:var(--paper);border:1px solid var(--line);border-radius:8px;height:70px;padding:6px 0 0;text-align:center;font-weight:600;color:var(--ink-2);position:relative}
-.m-cal div.pick::after{content:"";position:absolute;left:5px;right:5px;bottom:8px;height:22px;border-radius:5px;background:var(--accent);transition:transform .5s var(--ease)}
-.card:hover .m-cal div.pick::after{transform:translateY(-8px)}
-.m-cal+small,.m-bars+small{font-size:12px;font-weight:600;color:var(--accent-ink);display:flex;align-items:center;gap:6px}
-.m-bars{display:flex;align-items:flex-end;gap:8px;height:74px;padding:0 4px;border-bottom:1px solid var(--line)}
-.m-bars i{flex:1;background:#D6CABC;border-radius:4px 4px 0 0;transform-origin:bottom;transition:transform .6s var(--ease),background .3s}
-.m-bars i:last-child{background:var(--accent)}
-.card:hover .m-bars i{transform:scaleY(1.08)}
-.card:hover .m-bars i:nth-child(2){transition-delay:.05s}.card:hover .m-bars i:nth-child(3){transition-delay:.1s}.card:hover .m-bars i:nth-child(4){transition-delay:.15s}.card:hover .m-bars i:nth-child(5){transition-delay:.2s}
-@media (max-width:980px){.ex{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:620px){.ex{grid-template-columns:1fr}}
+/* use cases */
+.uc-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.uc-tab{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 20px 20px;cursor:pointer;display:grid;gap:6px;align-content:start;transition:background .3s,border-color .3s,color .3s,transform .5s var(--ease)}
+.uc-tab:hover{border-color:#CDBFAE;transform:translateY(-2px)}
+.uc-tab .t{font-family:var(--serif);font-size:1.35rem;font-weight:500;letter-spacing:-.015em;line-height:1.2;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.uc-tab .t svg{flex:none;color:var(--accent);transition:transform .5s var(--ease),color .3s}
+.uc-tab .p{font-size:15.5px;color:var(--ink-2);transition:color .3s}
+.uc-tab[aria-selected="true"]{background:var(--dark);border-color:var(--dark);color:var(--bg)}
+.uc-tab[aria-selected="true"] .p{color:var(--on-dark)}
+.uc-tab[aria-selected="true"] .t svg{color:var(--gold);transform:rotate(90deg)}
+.uc-flow{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:26px;margin-top:22px}
+.uc-node{position:relative}
+.uc-node:not(:last-child)::after{content:"";position:absolute;right:-21px;top:27px;width:16px;height:2px;background:#CDBFAE}
+.uc-btn{width:100%;height:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:border-color .25s,background .25s,box-shadow .4s var(--ease)}
+.uc-btn:hover{border-color:#CDBFAE}
+.uc-btn[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset,0 18px 34px -26px rgba(42,33,27,.45)}
+.uc-btn .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.uc-btn .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:15px;background:var(--bg-2);color:var(--accent-ink);transition:background .25s,color .25s}
+.uc-btn[aria-pressed="true"] .n{background:var(--accent);color:var(--bg)}
+.uc-btn .k{font-weight:600;font-size:15px;line-height:1.3}
+.uc-rows{display:grid;gap:5px;font-size:13.5px;line-height:1.35;color:var(--ink-2)}
+.uc-rows .kv{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 8px;background:var(--bg);border-radius:7px;padding:4px 8px}
+.uc-rows .kv b{color:var(--ink);font-weight:600;text-align:right;white-space:nowrap}
+.uc-rows .ln{background:var(--bg);border-radius:7px;padding:4px 8px;color:var(--ink)}
+.by{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.by.ai{color:var(--accent-ink)}
+.uc-detail{margin-top:18px;font-family:var(--serif);font-size:clamp(1.15rem,1.9vw,1.4rem);line-height:1.35;max-width:46ch;min-height:2.7em}
+.js .uc-flow.play .uc-node{animation:rowin .6s var(--ease) both}
+.js .uc-flow.play .uc-node:nth-child(2){animation-delay:.07s}.js .uc-flow.play .uc-node:nth-child(3){animation-delay:.14s}.js .uc-flow.play .uc-node:nth-child(4){animation-delay:.21s}.js .uc-flow.play .uc-node:nth-child(5){animation-delay:.28s}
+@keyframes rowin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.uc-more{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,40px);margin-top:clamp(36px,5vw,60px);padding-top:clamp(28px,4vw,44px);border-top:1px solid #DDD2C4}
+.uc-more h3{font-size:1.3rem}
+.uc-more p{color:var(--ink-2);font-size:16px;margin-top:8px}
+.ft{display:grid;justify-items:start;gap:6px;margin-top:14px;font-size:13px;font-weight:600}
+.ft span{padding:6px 10px;border-radius:9px;background:var(--paper);border:1px solid var(--line)}
+.ft svg{color:var(--accent);transform:rotate(90deg);margin-left:14px}
+.band{margin-top:clamp(36px,5vw,60px);background:var(--dark);color:var(--bg);border-radius:22px;padding:clamp(22px,3vw,32px) clamp(22px,3.4vw,40px);display:flex;justify-content:space-between;align-items:center;gap:20px 32px;flex-wrap:wrap;box-shadow:0 30px 60px -36px rgba(42,33,27,.55)}
+.band h3{font-size:clamp(1.4rem,2.3vw,1.8rem)}
+.band p{color:var(--on-dark);margin-top:6px;max-width:48ch}
+@media (max-width:980px){
+  .uc-flow{grid-template-columns:minmax(0,1fr);gap:14px}
+  .uc-node:not(:last-child)::after{right:auto;left:27px;top:auto;bottom:-13px;width:2px;height:12px}
+  .uc-btn{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:14px;row-gap:8px;align-items:start}
+  .uc-btn .top{display:contents}
+  .uc-btn .by{grid-column:2;grid-row:2}
+  .uc-btn .k{grid-column:2;grid-row:1;align-self:center}
+  .uc-rows{grid-column:2}
+}
+@media (max-width:820px){.uc-tabs,.uc-more{grid-template-columns:minmax(0,1fr)}}
 
-/* interaktiv demonstration */
+/* demonstration: AI-medarbejderen udfører opgaven */
 .demo{background:var(--dark);color:var(--bg)}
 .demo .intro{color:var(--on-dark)}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .tab{min-height:46px;padding:0 18px;border-radius:999px;border:1px solid var(--dark-line);background:transparent;color:var(--on-dark);font-weight:600;font-size:15px;cursor:pointer;transition:background .25s,border-color .25s,color .25s}
 .tab:hover{border-color:#6a5a4e;background:var(--dark-2)}
 .tab[aria-selected="true"]{background:var(--gold);border-color:var(--gold);color:var(--dark)}
-.dm{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(18px,3vw,40px);align-items:start}
-.dm-steps{list-style:none;display:grid;gap:6px}
-.dm-step{width:100%;display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:center;text-align:left;min-height:60px;padding:10px 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:var(--on-dark-2);cursor:pointer;font-size:16px;font-weight:500;transition:background .25s,color .25s,border-color .25s}
-.dm-step:hover{background:var(--dark-2);color:var(--bg)}
-.dm-step .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:17px;box-shadow:0 0 0 1.5px var(--dark-line) inset;transition:background .3s,color .3s,box-shadow .3s}
-.dm-step.past{color:var(--on-dark)}
-.dm-step.past .n{background:var(--dark-2);box-shadow:0 0 0 1.5px var(--gold) inset;color:var(--gold)}
-.dm-step[aria-current="step"]{background:var(--dark-2);border-color:var(--dark-line);color:var(--bg)}
-.dm-step[aria-current="step"] .n{background:var(--gold);color:var(--dark);box-shadow:none}
+.dm{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(16px,2.4vw,28px);align-items:start}
+.task{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:20px;padding:18px}
+.task-h{font-size:13px;font-weight:600;color:var(--on-dark-2);margin-bottom:10px;display:flex;justify-content:space-between;gap:10px}
+.inc{background:var(--bg);color:var(--ink);border-radius:12px;padding:13px 15px;display:grid;gap:5px;font-size:14.5px;line-height:1.35}
+.inc .fr{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.inc b{font-weight:600}
+.inc .kv{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.inc .kv span{color:var(--ink-2)}
+.btn-gold{background:var(--gold);color:var(--dark)}
+.btn-gold:hover{background:#E4C5A3}
+.btn[disabled]{opacity:.55;cursor:default}
+#demo-start{width:100%;margin-top:14px}
+.dm-steps{list-style:none;margin-top:14px;display:grid;gap:2px}
+.dm-steps li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:50px;padding:6px 10px;border-radius:12px;color:var(--on-dark-2);font-size:15px;line-height:1.3;transition:background .3s,color .3s}
+.dm-steps .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:15px;box-shadow:0 0 0 1.5px var(--dark-line) inset;transition:background .3s,color .3s,box-shadow .3s}
+.dm-steps .n svg{display:none}
+.dm-steps .st{font-size:12px;font-weight:600;white-space:nowrap}
+.dm-steps li.is-run{background:var(--dark-2);color:var(--bg)}
+.dm-steps li.is-run .n{box-shadow:0 0 0 1.5px var(--gold) inset,0 0 0 5px rgba(216,180,142,.16);color:var(--gold)}
+.dm-steps li.is-run .st,.dm-steps li.is-ask .st{color:var(--gold)}
+.dm-steps li.is-ok{color:var(--on-dark)}
+.dm-steps li.is-ok .n{background:var(--gold);color:var(--dark);box-shadow:none}
+.dm-steps li.is-ok .n svg{display:block}.dm-steps li.is-ok .n span{display:none}
+.dm-steps li.is-ask{background:var(--dark-2);color:var(--bg)}
+.dm-steps li.is-ask .n{box-shadow:0 0 0 1.5px var(--gold) inset;color:var(--gold)}
 .screen{background:var(--bg);color:var(--ink);border-radius:20px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
-.screen-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--paper);flex-wrap:wrap}
-.screen-top .status{color:var(--ink);font-size:14px}
+.screen-top{display:flex;align-items:center;gap:8px 14px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--paper);flex-wrap:wrap;min-height:58px}
+.screen-top .status{color:var(--ink);font-size:14.5px}
 .screen-top .led,.screen-top .led::after{background:var(--accent)}
 .screen:not(.busy) .led::after{animation:none;opacity:0}
-.count{font-size:13px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:10px}
-.bar{width:96px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
-.bar i{display:block;height:100%;width:100%;background:var(--accent);border-radius:3px;transform-origin:left;transition:transform .6s var(--ease)}
-.screen-body{padding:clamp(20px,3vw,30px);min-height:560px;display:flex;flex-direction:column}
-.screen-body h3{font-size:clamp(1.35rem,2.2vw,1.7rem)}
-.screen-body>p{margin-top:8px;color:var(--ink-2);font-size:16px}
-.rows{margin-top:18px;display:grid;gap:6px}
-.rows div{display:grid;grid-template-columns:minmax(96px,34%) 1fr;gap:12px;padding:9px 12px;border-radius:10px;background:var(--paper);border:1px solid var(--line);font-size:15px}
-.rows dt{color:var(--ink-2)}.rows dd{font-weight:600}
-.rows div.new{background:var(--mark);border-color:color-mix(in srgb,var(--accent) 30%,var(--line));animation:rowin .6s var(--ease) both}
-.rows div.new:nth-child(n+2){animation-delay:.08s}
-@keyframes rowin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.shim{height:40px;border-radius:10px;background:linear-gradient(100deg,var(--line) 30%,var(--bg-2) 50%,var(--line) 70%);background-size:220% 100%;animation:shim 1s linear infinite}
-@keyframes shim{from{background-position:120% 0}to{background-position:-100% 0}}
-.result{margin-top:16px;padding:14px 16px;border-radius:12px;border:1.5px dashed color-mix(in srgb,var(--accent) 55%,transparent);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;font-weight:600}
-.result.fin{border-style:solid;background:var(--mark)}
-.result .btn{min-height:44px}
-.screen-foot{margin-top:auto;padding-top:22px;display:flex;justify-content:space-between;gap:10px}
-.screen-foot .btn{min-height:46px}
-.screen-foot .btn[disabled]{opacity:.35;cursor:default}
-.demo-note{margin-top:18px;font-size:13.5px;color:var(--on-dark-2)}
-@media (max-width:860px){.dm{grid-template-columns:1fr}.dm-steps{grid-template-columns:repeat(4,1fr)}.dm-step{grid-template-columns:1fr;justify-items:center;padding:8px 4px;min-height:48px}.dm-step .lb{display:none}}
+.sysb{margin-left:auto;font-size:13.5px;color:var(--ink-2)}
+.sysb b{color:var(--ink);font-weight:600}
+.sim{font-size:11.5px;font-weight:600;letter-spacing:.03em;padding:4px 10px;border-radius:999px;background:var(--bg-2);color:var(--ink-2);white-space:nowrap}
+.screen-body{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);min-height:318px}
+.pane{padding:18px 20px 20px}
+.pane+.pane{border-left:1px solid var(--line)}
+.pane h3{font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.02em;color:var(--ink-2);margin-bottom:12px}
+.log{list-style:none;display:grid;gap:9px;font-size:14.5px;line-height:1.4}
+.log li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;align-items:start;animation:rowin .5s var(--ease) both}
+.log li svg{margin-top:3px;color:var(--accent)}
+.log li.hum{font-weight:600}
+.log li.sys{color:var(--ink-2);font-size:12.5px;font-weight:600;grid-template-columns:minmax(0,1fr);margin-top:4px}
+.log li.sys:first-child{margin-top:0}
+.log li.empty{display:block;color:var(--ink-2);font-size:14.5px;animation:none}
+.data{display:grid;gap:6px}
+.data div{padding:8px 11px;border-radius:10px;background:var(--paper);border:1px solid var(--line);font-size:14px;line-height:1.35;display:grid;gap:1px;transition:background .4s,border-color .4s}
+.data dt{font-size:12px;color:var(--ink-2)}
+.data dd{font-weight:600}
+.data div.pend{border-style:dashed;background:transparent}
+.data div.pend dd{color:#8A7C70;font-weight:400}
+.data div.new{background:var(--mark);border-color:color-mix(in srgb,var(--accent) 30%,var(--line))}
+.screen-foot{border-top:1px solid var(--line);padding:14px 20px;background:var(--paper);min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap}
+.screen-foot .q{font-weight:600}
+.screen-foot .hint{color:var(--ink-2);font-size:14.5px}
+.screen-foot .acts{display:flex;gap:8px;flex-wrap:wrap}
+.screen-foot .btn{min-height:44px;padding:0 18px}
+.screen-foot.ask{background:var(--mark)}
+.demo-note{margin-top:16px;font-size:13.5px;color:var(--on-dark-2)}
+@media (max-width:900px){.dm{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.screen-body{grid-template-columns:minmax(0,1fr);min-height:0}.pane+.pane{border-left:0;border-top:1px solid var(--line)}.sysb{margin-left:0;width:100%;order:3}}
 
 /* proces */
 .proc{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.6vw,36px);position:relative}
@@ -472,33 +509,72 @@ section{padding:clamp(64px,9vw,120px) 0}
 @media (max-width:860px){.proc{grid-template-columns:1fr 1fr}.proc li::before{display:none}}
 @media (max-width:520px){.proc{grid-template-columns:1fr}}
 
-/* egen case */
-.k0 .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:start}
-.k0 ol{padding-left:0;list-style:none;display:grid;gap:0}
-.k0 li{display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:start;padding:18px 0;border-top:1px solid var(--line);font-size:1.05rem}
-.k0 li:last-child{border-bottom:1px solid var(--line)}
-.k0 li svg{margin-top:4px}
-.k0 .note{margin-top:20px;font-size:15px;color:var(--ink-2)}
-@media (max-width:860px){.k0 .wrap{grid-template-columns:1fr}}
+/* egne automatiseringer */
+.lanes{display:grid}
+.lane{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.6fr);gap:clamp(16px,3vw,44px);align-items:center;padding:clamp(20px,2.6vw,28px) 0;border-top:1px solid #DDD2C4}
+.lane:last-child{border-bottom:1px solid #DDD2C4}
+.lane h3{font-size:1.35rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.live-pill{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:0;padding:4px 10px;border-radius:999px;background:var(--paper);border:1px solid var(--line);color:var(--accent-ink);display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.live-pill i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.lane p{color:var(--ink-2);font-size:16px;margin-top:8px}
+.flowrow{list-style:none;display:flex;gap:24px;align-items:stretch}
+.flowrow li{flex:1 1 0;min-width:0;position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px 14px;font-size:14.5px;font-weight:500;line-height:1.35;display:flex;flex-direction:column;gap:8px}
+.flowrow li:not(:last-child)::after{content:"";position:absolute;right:-20px;top:50%;width:16px;height:2px;background:#CDBFAE}
+.flowrow li.hum{background:var(--dark);border-color:var(--dark);color:var(--bg)}
+.flowrow li.hum .by{color:var(--gold)}
+.k0 .note{margin-top:22px;font-size:15px;color:var(--ink-2)}
+@media (max-width:980px){.lane{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){
+  .flowrow{flex-direction:column;gap:14px}
+  .flowrow li:not(:last-child)::after{right:auto;left:22px;top:auto;bottom:-13px;width:2px;height:12px}
+}
 
 /* tryghed */
-.trust ul{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line)}
-.trust li{padding:28px 0;border-bottom:1px solid var(--line)}
-.trust li:nth-child(odd){padding-right:40px;border-right:1px solid var(--line)}
-.trust li:nth-child(even){padding-left:40px}
-.trust li strong{display:block;font-family:var(--serif);font-size:1.35rem;font-weight:500;margin-bottom:6px}
-.trust li span{color:var(--ink-2)}
-@media (max-width:760px){.trust ul{grid-template-columns:1fr}.trust li:nth-child(odd){padding-right:0;border-right:0}.trust li:nth-child(even){padding-left:0}}
+.tgrid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(14px,2vw,22px)}
+.tcard{border-radius:22px;padding:clamp(22px,3vw,34px);background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.tcard.dk{background:var(--dark);color:var(--bg);border-color:var(--dark);box-shadow:0 30px 60px -36px rgba(42,33,27,.55)}
+.tcard h3{font-size:clamp(1.4rem,2.2vw,1.7rem)}
+.tcard>p{color:var(--ink-2)}
+.tcard.dk>p{color:var(--on-dark)}
+.tvis{margin-top:auto;padding-top:14px}
+.appr{background:var(--bg);color:var(--ink);border-radius:14px;padding:14px 16px;display:grid;gap:12px}
+.appr-top{display:flex;justify-content:space-between;align-items:center;gap:10px 14px;flex-wrap:wrap;font-weight:600;font-size:15px}
+.appr-btns{display:flex;gap:8px}
+.fake{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 13px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.fake.y{background:var(--accent);color:var(--bg)}
+.fake.n{box-shadow:0 0 0 1.5px #CFC3B4 inset;color:var(--ink)}
+.appr ul{list-style:none;display:grid;gap:6px;font-size:13.5px;color:var(--ink-2);border-top:1px solid var(--line);padding-top:12px}
+.appr li{display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:center}
+.appr li svg{color:var(--accent)}
+.sysrow{display:flex;flex-wrap:wrap;gap:8px}
+.sysrow .chip{background:var(--bg);min-height:34px;font-size:13.5px}
+.sysrow .chip.add{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.facts{display:grid;gap:0;border-top:1px solid var(--line)}
+.facts div{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.4}
+.facts dt{color:var(--ink-2)}
+.facts dd{font-weight:600}
+.verd{list-style:none;display:grid;gap:8px}
+.verd li{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14.5px;line-height:1.35}
+.verd b{font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--accent);color:var(--bg);white-space:nowrap}
+.verd b.no{background:var(--bg-2);color:var(--ink)}
+.tcard .big{font-family:var(--serif);font-size:clamp(1.2rem,1.9vw,1.45rem);line-height:1.35;color:var(--ink)}
+@media (max-width:860px){.tgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.facts div{grid-template-columns:minmax(0,1fr);gap:2px}}
 
 /* om os */
 .about .ppl{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,28px)}
-.about .p{display:grid;grid-template-columns:84px 1fr;gap:20px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,2.8vw,30px)}
-.about .av{width:84px;height:84px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line);display:grid;place-items:center;font-family:var(--serif);font-size:34px;color:var(--accent)}
-.about .role{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:4px 0 10px}
-.about a.li{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-size:14.5px;color:var(--ink-2)}
+.about .p{display:grid;grid-template-columns:clamp(104px,13vw,148px) minmax(0,1fr);gap:clamp(18px,2.4vw,28px);align-items:stretch;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,2.4vw,26px)}
+.portrait{aspect-ratio:4/5;border-radius:16px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;align-self:start}
+.portrait span{font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);color:var(--accent);line-height:1}
+.portrait img{width:100%;height:100%;object-fit:cover}
+.portrait img+span{display:none}
+.about .does{font-family:var(--serif);font-size:1.05rem;color:var(--ink-2);font-style:italic}
+.about h3{margin-top:4px;font-size:clamp(1.4rem,2.2vw,1.65rem)}
+.about .role{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:6px 0 10px}
+.about a.li{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-size:14.5px;color:var(--ink-2);margin-top:4px}
 .about a.li:hover{color:var(--accent)}
-@media (max-width:820px){.about .ppl{grid-template-columns:1fr}}
-@media (max-width:420px){.about .p{grid-template-columns:1fr}}
+@media (max-width:900px){.about .ppl{grid-template-columns:1fr}}
+@media (max-width:420px){.about .p{grid-template-columns:96px minmax(0,1fr)}}
 
 /* faq */
 .faq details{border-top:1px solid var(--line)}
@@ -513,17 +589,62 @@ section{padding:clamp(64px,9vw,120px) 0}
 @media (max-width:860px){.faq .wrap{grid-template-columns:minmax(0,1fr)}}
 
 /* kontakt */
-.cta{background:var(--dark);color:var(--bg);text-align:center}
-.cta h2{font-size:clamp(2rem,4.4vw,3.2rem);margin:0 auto;max-width:18ch}
-.cta p{margin:16px auto 30px;color:var(--on-dark);font-size:1.1rem;max-width:44ch}
-.cta .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.cta .fine{margin:22px auto 0;font-size:14px;color:var(--on-dark-2)}
+.cta{background:var(--dark);color:var(--bg)}
+.cta .wrap{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(28px,5vw,72px);align-items:start}
+.cta h2{font-size:clamp(2rem,4.2vw,3.1rem)}
+.cta .lead{margin-top:16px;color:var(--on-dark);font-size:1.1rem;max-width:40ch}
+.next{list-style:none;counter-reset:n;margin-top:30px;display:grid;gap:16px}
+.next li{counter-increment:n;display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;align-items:start;color:var(--on-dark);line-height:1.45}
+.next li::before{content:counter(n);width:32px;height:32px;border-radius:50%;box-shadow:0 0 0 1.5px var(--dark-line) inset;display:grid;place-items:center;font-family:var(--serif);font-size:16px;color:var(--gold)}
+.next li span{padding-top:4px}
+.cta .alt{margin-top:30px;font-size:15px;color:var(--on-dark-2)}
+.cta .alt a{color:var(--gold)}
+.form{background:var(--bg);color:var(--ink);border-radius:22px;padding:clamp(20px,3vw,32px);display:grid;gap:16px;box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.form :focus-visible{outline-color:var(--accent)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:grid;gap:6px;align-content:start}
+.field label{font-size:14.5px;font-weight:600}
+.field .opt{font-weight:400;color:var(--ink-2)}
+.field input,.field textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid #CFC3B4;border-radius:12px;padding:12px 14px;min-height:50px;width:100%;transition:border-color .2s,box-shadow .2s}
+.field textarea{min-height:112px;resize:vertical;line-height:1.5}
+.field input::placeholder,.field textarea::placeholder{color:#7A6D62}
+.field input:hover,.field textarea:hover{border-color:#B3A493}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.field .msg{display:none;font-size:13.5px;font-weight:500;color:#9A3412;gap:7px;align-items:flex-start}
+.field .msg svg{flex:none;margin-top:2px}
+.field.err input,.field.err textarea{border-color:#B4441F;box-shadow:0 0 0 3px rgba(180,68,31,.14)}
+.field.err .msg{display:flex}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .send{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap}
+.form .send .btn{min-height:52px;padding:0 26px}
+.form .hint,.form .legal{font-size:13.5px;color:var(--ink-2);max-width:none}
+.form .legal a{color:var(--accent-ink)}
+.fstatus{display:none;border-radius:14px;padding:14px 16px;font-size:15.5px;line-height:1.45;gap:12px;align-items:flex-start}
+.fstatus.show{display:flex}
+.fstatus svg{flex:none;margin-top:3px}
+.fstatus.is-ok,.fstatus.is-info{background:var(--mark);color:var(--ink);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line))}
+.fstatus.is-ok svg,.fstatus.is-info svg{color:var(--accent)}
+.fstatus.is-bad{background:#FBEDE7;color:#7A2A12;border:1px solid #E4B8A6}
+.fstatus a{color:inherit;font-weight:600}
+.fstatus>div{display:grid;gap:12px;justify-items:start}
+.fstatus .btn{min-height:44px;padding:0 18px;font-size:14.5px}
+.ffields{display:grid;gap:16px}
+.form.sent .ffields{display:none}
+@media (max-width:900px){.cta .wrap{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.fgrid{grid-template-columns:minmax(0,1fr)}}
 
-footer{padding:36px 0;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2)}
-footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center}
-footer ul{list-style:none;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
-footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
-.fbrand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.fbrand strong{letter-spacing:.14em;color:var(--ink)}
+footer{padding:clamp(40px,5vw,64px) 0 28px;font-size:14.5px;color:var(--ink-2)}
+.fcols{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px)}
+.fbrand{display:flex;align-items:center;gap:10px}.fbrand strong{letter-spacing:.14em;color:var(--ink)}
+.fabout{margin-top:12px;max-width:34ch}
+.fh{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+footer ul{list-style:none;display:grid;gap:0}
+footer li a{display:inline-flex;align-items:center;min-height:36px}
+footer li a:hover{color:var(--accent)}
+footer li.plain{min-height:36px;display:flex;align-items:center}
+.fbot{margin-top:clamp(28px,4vw,44px);padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+@media (max-width:820px){.fcols{grid-template-columns:1fr 1fr}.fcols>div:first-child{grid-column:1/-1}}
+@media (max-width:640px){footer li a,footer li.plain{min-height:44px}}
 
 /* indtrædning ved scroll: indholdet er synligt uden script */
 .js [data-rv]{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .9s var(--ease)}
@@ -532,13 +653,12 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
 .js [data-rv="list"]>*{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .8s var(--ease)}
 .js [data-rv="list"].in>*{opacity:1;transform:none}
 .js [data-rv="list"].in>*:nth-child(2){transition-delay:.07s}.js [data-rv="list"].in>*:nth-child(3){transition-delay:.14s}.js [data-rv="list"].in>*:nth-child(4){transition-delay:.21s}.js [data-rv="list"].in>*:nth-child(5){transition-delay:.28s}.js [data-rv="list"].in>*:nth-child(6){transition-delay:.35s}
-.js .card{transition:opacity .7s var(--ease),transform .5s var(--ease),box-shadow .5s var(--ease),border-color .3s}
 @media (prefers-reduced-motion:reduce){
   .js [data-rv],.js [data-rv="list"]>*{opacity:1;transform:none;transition:none}
-  .v-doc::after,.v-out i,.v-flow .pk,.rows div.new,.shim{animation:none}
+  .v-doc::after,.v-out i,.v-flow .pk,.log li,.js .uc-flow.play .uc-node{animation:none}
   .v-flow .pk{left:calc(50% - 6px)}
-  .card,.card *{transition:none!important}
-  .card:hover{transform:none}
+  .uc-tab,.uc-tab *,.uc-btn{transition:none!important}
+  .uc-tab:hover{transform:none}
 }
 
 @media print{.js [data-rv],.js [data-rv="list"]>*{opacity:1!important;transform:none!important}.nav,#cookie-banner{display:none!important}}
@@ -562,6 +682,7 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <symbol id="i-mail" viewBox="0 0 16 16"><rect x="1.8" y="3.3" width="12.4" height="9.4" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2.4 4.6L8 8.8l5.6-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-ledger" viewBox="0 0 16 16"><rect x="2.5" y="1.8" width="11" height="12.4" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.2 5.4h5.6M5.2 8h5.6M5.2 10.6h3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
   <symbol id="i-people" viewBox="0 0 16 16"><circle cx="6" cy="5.6" r="2.3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M1.8 13.4c.4-2.4 2-3.6 4.2-3.6s3.8 1.2 4.2 3.6M10.6 3.6a2.2 2.2 0 010 4.2M12 10c1.300.5 2 1.600 2.300 3.400" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.300" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.700v3.900" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="11.100" r="1" fill="currentColor"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M3 8h9.5M8.800 4.200L12.600 8l-3.800 3.800" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -601,7 +722,7 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <div class="wrap">
     <div>
       <h1 id="h1" data-i18n-html="hero.h1">Vi får jeres kedelige computerarbejde til at <span class="em">klare sig selv.</span></h1>
-      <p class="lead" data-i18n="hero.lead">Nordagent bygger AI-medarbejdere og automatiske arbejdsgange, der håndterer virksomhedens gentagne opgaver – så jeres medarbejdere får mere tid til det, der virkelig betyder noget.</p>
+      <p class="lead" data-i18n="hero.lead">Nordagent bygger AI-medarbejdere og automatiske arbejdsgange, der tager sig af virksomhedens gentagne opgaver, så jeres medarbejdere får tid til kunderne og det faglige arbejde.</p>
       <div class="actions">
         <a class="btn btn-primary" href="#kontakt"><span data-i18n="hero.cta1">Find ud af, hvad vi kan automatisere</span><svg class="arr" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-ghost" href="#demo" data-i18n="hero.cta2">Se hvordan det fungerer</a>
@@ -612,39 +733,64 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
     <figure class="stage on-dark done" id="stage" aria-labelledby="stage-cap">
       <div class="stage-top">
         <div class="status"><span class="led" aria-hidden="true"></span><span id="stage-status">Godkendt af en medarbejder</span></div>
-        <button class="iconbtn" id="stage-toggle" type="button" aria-label="Sæt animationen på pause">
-          <svg class="i-pause" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="2" width="3.2" height="10" rx="1" fill="currentColor"/><rect x="8.300" y="2" width="3.2" height="10" rx="1" fill="currentColor"/></svg>
-          <svg class="i-play" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.600a.6.6 0 00.9.5l8-4.800a.6.6 0 000-1l-8-4.800a.6.6 0 00-.9.500z" fill="currentColor"/></svg>
-        </button>
+        <div class="stage-ctl">
+          <span class="stage-count" id="stage-count">Trin 5 af 5</span>
+          <button class="iconbtn" id="stage-toggle" type="button" aria-label="Sæt animationen på pause">
+            <svg class="i-pause" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="2" width="3.2" height="10" rx="1" fill="currentColor"/><rect x="8.3" y="2" width="3.2" height="10" rx="1" fill="currentColor"/></svg>
+            <svg class="i-play" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.3v9.4c0 .5.5.8.9.5l7.8-4.7c.4-.2.4-.8 0-1L4.4 1.8c-.4-.3-.9 0-.9.5z" fill="currentColor"/></svg>
+          </button>
+        </div>
       </div>
-      <div class="stage-body">
-        <div class="desk" aria-hidden="true">
-          <div class="sheet" data-from="1">
-            <div class="scan"></div>
-            <div class="mailbar"><svg width="16" height="16"><use href="#i-mail"/></svg><span data-i18n="st.mail">Ny e-mail</span><span class="tag" data-i18n="st.att">faktura.pdf</span></div>
-            <div class="sheet-h"><span data-i18n="st.inv">Faktura</span><small data-i18n="st.no">nr. 2041</small></div>
-            <dl class="flds">
-              <div class="fld" data-from="3"><dt data-i18n="st.f1">Leverandør</dt><dd data-i18n="st.sup">Eksempel A/S</dd></div>
-              <div class="fld" data-from="3"><dt data-i18n="st.f2">Beløb</dt><dd data-i18n="st.amt">4.250,00 kr.</dd></div>
-              <div class="fld" data-from="3"><dt data-i18n="st.f3">Dato</dt><dd data-i18n="st.date">12.11.2026</dd></div>
-            </dl>
-            <div class="skel"><i></i><i></i><i></i></div>
+      <ol class="rail" id="stage-rail" aria-hidden="true"><li class="done"></li><li class="done"></li><li class="done"></li><li class="done"></li><li class="done"></li></ol>
+      <ol class="sr">
+        <li data-i18n="st.1">En faktura lander i Outlook</li>
+        <li data-i18n="st.2">AI-agenten læser fakturaen</li>
+        <li data-i18n="st.3">Den finder leverandør, beløb og fakturadato</li>
+        <li data-i18n="st.4">Den sender oplysningerne til økonomisystemet</li>
+        <li data-i18n="st.5">En medarbejder godkender</li>
+      </ol>
+      <div class="pipe" aria-hidden="true">
+        <div class="stn" data-stn="1">
+          <div class="stn-h"><span class="stn-n"><svg width="16" height="16"><use href="#i-mail"/></svg>Outlook</span><span class="pill" id="pill-1">Læst</span></div>
+          <div class="stn-b">
+            <div class="wait" data-i18n="st.w1">Ingen ny post</div>
+            <div class="mrow" data-from="1"><span class="un"></span><div><b data-i18n="st.sup">Eksempel A/S</b><span class="sj" data-i18n="st.subj">Faktura for november</span></div><span class="tag" data-i18n="st.att">faktura.pdf</span></div>
           </div>
-          <div class="draft" data-from="4">
-            <div class="slot"><svg width="15" height="15"><use href="#i-ledger"/></svg><span data-i18n="st.slot">Økonomisystem</span></div>
-            <div class="draft-in">
-              <div><div class="t" data-i18n="st.draft">Udkast i økonomisystemet</div><div class="v" data-i18n="st.draftv">Eksempel A/S · 4.250,00 kr.</div></div>
+        </div>
+        <div class="link on"></div>
+        <div class="stn" data-stn="2">
+          <div class="stn-h"><span class="stn-n"><svg width="16" height="16"><use href="#i-agent"/></svg><span data-i18n="st.agent">AI-agent</span></span><span class="pill" id="pill-2">3 oplysninger fundet</span></div>
+          <div class="stn-b">
+            <div class="wait" data-i18n="st.w2">Venter på en faktura</div>
+            <div class="read">
+              <div class="doc" data-from="2">
+                <div class="scan"></div>
+                <div class="doc-h"><span data-i18n="st.inv">Faktura</span><small data-i18n="st.no">nr. 2041</small></div>
+                <p data-from="3" data-i18n="st.sup">Eksempel A/S</p>
+                <i></i>
+                <p data-from="3" data-i18n="st.amt">4.250,00 kr.</p>
+                <i class="s"></i>
+                <p data-from="3" data-i18n="st.date">12.11.2026</p>
+              </div>
+              <dl class="found">
+                <div class="fd" data-from="3"><dt data-i18n="st.f1">Leverandør</dt><dd data-i18n="st.sup">Eksempel A/S</dd></div>
+                <div class="fd" data-from="3"><dt data-i18n="st.f2">Beløb</dt><dd data-i18n="st.amt">4.250,00 kr.</dd></div>
+                <div class="fd" data-from="3"><dt data-i18n="st.f3">Dato</dt><dd data-i18n="st.date">12.11.2026</dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <div class="link on"></div>
+        <div class="stn" data-stn="3">
+          <div class="stn-h"><span class="stn-n"><svg width="16" height="16"><use href="#i-ledger"/></svg><span data-i18n="st.slot">Økonomisystem</span></span><span class="pill" id="pill-3">Godkendt</span></div>
+          <div class="stn-b">
+            <div class="wait" data-i18n="st.w3">Venter på oplysninger</div>
+            <div class="draft-in" data-from="4">
+              <div><div class="t" data-i18n="st.draft">Udkast til bogføring</div><div class="v" data-i18n="st.draftv">Eksempel A/S · 4.250,00 kr.</div></div>
               <span class="ok yes" id="stage-ok"><svg width="14" height="14"><use href="#i-check"/></svg><span class="l-done" data-i18n="st.okd">Godkendt</span><span class="l-wait" data-i18n="st.okw">Godkend</span></span>
             </div>
           </div>
         </div>
-        <ol class="steps" id="stage-steps">
-          <li class="done"><span class="dot" aria-hidden="true"><svg width="14" height="14"><use href="#i-check"/></svg></span><span class="tx" data-i18n="st.1">En e-mail med en faktura lander</span></li>
-          <li class="done"><span class="dot" aria-hidden="true"><svg width="14" height="14"><use href="#i-check"/></svg></span><span class="tx" data-i18n="st.2">AI-agenten læser mailen og fakturaen</span></li>
-          <li class="done"><span class="dot" aria-hidden="true"><svg width="14" height="14"><use href="#i-check"/></svg></span><span class="tx" data-i18n="st.3">Den finder leverandør, beløb og dato</span></li>
-          <li class="done"><span class="dot" aria-hidden="true"><svg width="14" height="14"><use href="#i-check"/></svg></span><span class="tx" data-i18n="st.4">Den opretter et udkast i økonomisystemet</span></li>
-          <li class="done"><span class="dot" aria-hidden="true"><svg width="14" height="14"><use href="#i-check"/></svg></span><span class="tx" data-i18n="st.5">En medarbejder godkender</span></li>
-        </ol>
       </div>
       <figcaption class="stage-foot" id="stage-cap" data-i18n="st.cap">Sådan kan en arbejdsgang se ud. Illustration med opdigtede data.</figcaption>
     </figure>
@@ -662,7 +808,7 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <div class="wrap">
     <div class="head" data-rv>
       <h2 id="h-prob" data-i18n="pr.h2">Hvor meget af jeres arbejdsdag går med opgaver, der gentager sig?</h2>
-      <p class="intro muted" data-i18n="pr.intro">Det meste kontorarbejde er ikke svært. Det er bare det samme igen og igen.</p>
+      <p class="intro muted" data-i18n="pr.intro">Meget kontorarbejde er de samme opgaver, I også løste i går og i sidste uge.</p>
     </div>
     <div class="ba" data-rv="list">
       <div class="ba-col before">
@@ -676,20 +822,20 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
           <li><span data-i18n="pr.5">Følge op på potentielle kunder</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-person"/></svg><span data-i18n="pr.hand">I hånden</span></span></li>
           <li><span data-i18n="pr.6">Udarbejde rapporter</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-person"/></svg><span data-i18n="pr.hand">I hånden</span></span></li>
         </ul>
-        <div class="ba-keep"><span data-i18n="pr.b.keep">Og bagefter: det arbejde, der faktisk kræver et menneske.</span></div>
+        <div class="ba-keep"><span data-i18n="pr.b.keep">Først derefter er der tid til det arbejde, der kræver et menneske.</span></div>
       </div>
       <div class="ba-col after on-dark">
         <h3 data-i18n="pr.a.h">Efter</h3>
-        <p data-i18n="pr.a.p">AI-agenten tager de gentagne trin. Medarbejderen beholder kontrollen.</p>
+        <p data-i18n="pr.a.p">AI-agenten tager de gentagne opgaver.</p>
         <ul class="ba-list">
-          <li><span data-i18n="pr.1">Læse og sortere e-mails</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">AI-agenten gør klar</span></span></li>
-          <li><span data-i18n="pr.2">Kopiere oplysninger mellem systemer</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">AI-agenten gør klar</span></span></li>
-          <li><span data-i18n="pr.3">Behandle fakturaer og dokumenter</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">AI-agenten gør klar</span></span></li>
-          <li><span data-i18n="pr.4">Opdatere kundedata</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">AI-agenten gør klar</span></span></li>
-          <li><span data-i18n="pr.5">Følge op på potentielle kunder</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">AI-agenten gør klar</span></span></li>
-          <li><span data-i18n="pr.6">Udarbejde rapporter</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">AI-agenten gør klar</span></span></li>
+          <li><span data-i18n="pr.1">Læse og sortere e-mails</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">Agenten klarer det</span></span></li>
+          <li><span data-i18n="pr.2">Kopiere oplysninger mellem systemer</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">Agenten klarer det</span></span></li>
+          <li><span data-i18n="pr.3">Behandle fakturaer og dokumenter</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">Agenten klarer det</span></span></li>
+          <li><span data-i18n="pr.4">Opdatere kundedata</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">Agenten klarer det</span></span></li>
+          <li><span data-i18n="pr.5">Følge op på potentielle kunder</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">Agenten klarer det</span></span></li>
+          <li><span data-i18n="pr.6">Udarbejde rapporter</span><span class="who"><svg width="15" height="15" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="pr.agent">Agenten klarer det</span></span></li>
         </ul>
-        <div class="ba-keep"><svg width="20" height="20" aria-hidden="true" style="color:var(--gold)"><use href="#i-person"/></svg><span data-i18n="pr.a.keep">Medarbejderen godkender og har tid til resten.</span></div>
+        <div class="ba-keep"><svg width="20" height="20" aria-hidden="true" style="color:var(--gold)"><use href="#i-person"/></svg><span data-i18n="pr.a.keep">Medarbejderen godkender og bruger tiden på det, der kræver et menneske.</span></div>
       </div>
     </div>
   </div>
@@ -700,7 +846,7 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <div class="wrap">
     <div class="head" data-rv>
       <h2 id="h-what" data-i18n="w.h2">Vi bygger digitale medarbejdere til jeres virksomhed.</h2>
-      <p class="intro muted" data-i18n="w.intro">Vi bygger dem for jer. I behøver ikke kunne noget teknisk.</p>
+      <p class="intro muted" data-i18n="w.intro">I skal ikke kunne noget teknisk. I skal kun kunne fortælle, hvordan I løser opgaven i dag.</p>
     </div>
     <div class="duo" data-rv="list">
       <article class="prod">
@@ -713,7 +859,7 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
         </div>
         <div class="prod-tx">
           <h3 data-i18n="w.a.h">AI-agenter</h3>
-          <p data-i18n="w.a.p">Digitale hjælpere, der kan læse, forstå, undersøge, skrive og behandle information for virksomheden.</p>
+          <p data-i18n="w.a.p">En AI-agent læser mails og dokumenter, forstår, hvad de handler om, og skriver et udkast, I kan rette i.</p>
           <p class="like" data-i18n="w.a.like">Som en kollega, der læser posten og lægger et svar klar til jer.</p>
         </div>
       </article>
@@ -727,13 +873,13 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
           </div>
         </div>
         <div class="prod-tx">
-          <h3 data-i18n="w.b.h">Automatiserede workflows</h3>
-          <p data-i18n="w.b.p">Arbejdsgange, der forbinder virksomhedens systemer og automatisk flytter information og udfører handlinger.</p>
+          <h3 data-i18n="w.b.h">Automatiske arbejdsgange</h3>
+          <p data-i18n="w.b.p">En arbejdsgang flytter selv oplysninger fra ét system til et andet, fx fra en mail til økonomisystemet.</p>
           <p class="like" data-i18n="w.b.like">Som et transportbånd mellem jeres systemer.</p>
         </div>
       </article>
     </div>
-    <p class="duo-foot" data-rv data-i18n="w.foot">Agenten forstår indholdet. Arbejdsgangen flytter det derhen, hvor det skal bruges. Ofte bygger vi begge dele sammen.</p>
+    <p class="duo-foot" data-rv data-i18n="w.foot">Agenten forstår indholdet, og arbejdsgangen flytter det derhen, hvor det skal bruges. Ofte bygger vi de to sammen.</p>
   </div>
 </section>
 
@@ -742,65 +888,52 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <div class="wrap">
     <div class="head" data-rv>
       <h2 id="h-ex" data-i18n="e.h2">Hvad kan vi egentlig automatisere?</h2>
-      <p class="intro muted" data-i18n="e.intro">Seks eksempler på opgaver, vi kan bygge en løsning til.</p>
+      <p class="intro muted" data-i18n="e.intro">Her er seks eksempler. Tryk på et af de tre første for at se arbejdsgangen trin for trin.</p>
     </div>
-    <div class="ex" data-rv="list">
-      <article class="card">
-        <div class="mini" aria-hidden="true">
-          <div class="row"><span data-i18n="e1.r1">Faktura for november</span><span class="tag" data-i18n="e1.t1">Faktura</span></div>
-          <div class="row"><span data-i18n="e1.r2">Hvornår kommer min ordre?</span><span class="tag" data-i18n="e1.t2">Kunde</span></div>
-          <div class="row"><span data-i18n="e1.r3">Kan vi få et tilbud?</span><span class="tag" data-i18n="e1.t3">Salg</span></div>
-        </div>
-        <h3 data-i18n="e1.h">E-mailassistent</h3>
-        <p data-i18n="e1.p">Sorterer indgående e-mails, finder ud af, hvad de handler om, og lægger et svar klar.</p>
-      </article>
-      <article class="card">
-        <div class="mini" aria-hidden="true">
-          <div class="m-inv">
-            <div><span data-i18n="st.f1">Leverandør</span><b data-i18n="st.sup">Eksempel A/S</b></div>
-            <div><span data-i18n="st.f2">Beløb</span><b data-i18n="st.amt">4.250,00 kr.</b></div>
-            <div><span data-i18n="st.f3">Dato</span><b data-i18n="st.date">12.11.2026</b></div>
-          </div>
-        </div>
-        <h3 data-i18n="e2.h">Fakturabehandling</h3>
-        <p data-i18n="e2.p">Læser fakturaer, finder oplysningerne og gør dem klar til økonomisystemet.</p>
-      </article>
-      <article class="card">
-        <div class="mini" aria-hidden="true">
-          <div class="m-crm">
-            <div class="nm"><i></i><span data-i18n="e3.n">Kundekort</span></div>
-            <div class="f"><span data-i18n="e3.f1">Telefon</span><b><svg width="13" height="13"><use href="#i-check"/></svg><span data-i18n="e3.v1">Opdateret</span></b></div>
-            <div class="f"><span data-i18n="e3.f2">Seneste kontakt</span><b><svg width="13" height="13"><use href="#i-check"/></svg><span data-i18n="e3.v2">I dag</span></b></div>
-          </div>
-        </div>
+    <div data-rv>
+      <div class="uc-tabs" role="tablist" aria-labelledby="h-ex" id="uc-tabs">
+        <button class="uc-tab" role="tab" type="button" id="uc-tab-0" aria-controls="uc-panel" aria-selected="true">
+          <span class="t"><span data-i18n="e1.h">E-mailassistent</span><svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          <span class="p" data-i18n="e1.p">Sorterer indgående e-mails, finder ud af, hvad de handler om, og lægger et svar klar.</span>
+        </button>
+        <button class="uc-tab" role="tab" type="button" id="uc-tab-1" aria-controls="uc-panel" aria-selected="false" tabindex="-1">
+          <span class="t"><span data-i18n="e2.h">Fakturabehandling</span><svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          <span class="p" data-i18n="e2.p">Læser fakturaer, finder oplysningerne og gør dem klar til økonomisystemet.</span>
+        </button>
+        <button class="uc-tab" role="tab" type="button" id="uc-tab-2" aria-controls="uc-panel" aria-selected="false" tabindex="-1">
+          <span class="t"><span data-i18n="e4.h">Leadgenerering</span><svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          <span class="p" data-i18n="e4.p">Finder virksomheder, der kunne blive kunder, undersøger dem og udvælger dem, der passer.</span>
+        </button>
+      </div>
+      <div role="tabpanel" id="uc-panel" aria-labelledby="uc-tab-0">
+        <ol class="uc-flow" id="uc-flow"></ol>
+        <p class="uc-detail" id="uc-detail" aria-live="polite"></p>
+        <noscript><p class="intro muted">Arbejdsgangen har fem trin: noget kommer ind, AI-agenten læser det, oplysningerne findes, jeres system får dem, og en medarbejder godkender.</p></noscript>
+      </div>
+    </div>
+    <ul class="uc-more" data-rv="list">
+      <li>
         <h3 data-i18n="e3.h">CRM-automatisering</h3>
         <p data-i18n="e3.p">Opdaterer kundedata og noterer nye oplysninger, så ingen skal taste dem ind.</p>
-      </article>
-      <article class="card">
-        <div class="mini" aria-hidden="true">
-          <div class="row"><span data-i18n="e4.r1">Virksomhed A</span><span class="tag" data-i18n="e4.y">Passer</span></div>
-          <div class="row"><span data-i18n="e4.r2">Virksomhed B</span><span class="tag no" data-i18n="e4.n">Passer ikke</span></div>
-          <div class="row"><span data-i18n="e4.r3">Virksomhed C</span><span class="tag" data-i18n="e4.y">Passer</span></div>
-        </div>
-        <h3 data-i18n="e4.h">Leadgenerering</h3>
-        <p data-i18n="e4.p">Finder potentielle kunder, undersøger virksomhederne og udvælger dem, der passer.</p>
-      </article>
-      <article class="card">
-        <div class="mini" aria-hidden="true">
-          <div class="m-cal"><div data-i18n="e5.d1">Man</div><div data-i18n="e5.d2">Tir</div><div class="pick" data-i18n="e5.d3">Ons</div><div data-i18n="e5.d4">Tor</div><div data-i18n="e5.d5">Fre</div></div>
-          <small><svg width="13" height="13"><use href="#i-check"/></svg><span data-i18n="e5.s">Forslag til tidspunkt sendt</span></small>
-        </div>
+        <div class="ft"><span data-i18n="e3.a">Ny oplysning i en mail</span><svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg><span data-i18n="e3.b">Kundekortet er opdateret</span></div>
+      </li>
+      <li>
         <h3 data-i18n="e5.h">Mødebooking</h3>
-        <p data-i18n="e5.p">Hjælper med at koordinere, følge op og planlægge møder.</p>
-      </article>
-      <article class="card">
-        <div class="mini" aria-hidden="true">
-          <div class="m-bars"><i style="height:46%"></i><i style="height:62%"></i><i style="height:54%"></i><i style="height:78%"></i><i style="height:88%"></i></div>
-          <small><svg width="13" height="13"><use href="#i-check"/></svg><span data-i18n="e6.s">Ugerapporten er klar</span></small>
-        </div>
+        <p data-i18n="e5.p">Finder tidspunkter, sender forslag og følger op, til mødet er på plads.</p>
+        <div class="ft"><span data-i18n="e5.a">En kunde vil mødes</span><svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg><span data-i18n="e5.b">Forslag til tidspunkter er sendt</span></div>
+      </li>
+      <li>
         <h3 data-i18n="e6.h">Rapportering</h3>
-        <p data-i18n="e6.p">Samler tal fra de relevante systemer og gør rapporten klar.</p>
-      </article>
+        <p data-i18n="e6.p">Samler tallene fra jeres systemer og har rapporten klar til tiden.</p>
+        <div class="ft"><span data-i18n="e6.a">Fast tidspunkt hver uge</span><svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg><span data-i18n="e6.b">Rapporten ligger klar</span></div>
+      </li>
+    </ul>
+    <div class="band on-dark" data-rv>
+      <div>
+        <h3 data-i18n="e.cta.h">Ligner det en opgave hos jer?</h3>
+        <p data-i18n="e.cta.p">Beskriv den kort, så vurderer vi, om den kan automatiseres.</p>
+      </div>
+      <a class="btn btn-light" href="#kontakt"><span data-i18n="e.cta.b">Fortæl os om opgaven</span><svg class="arr" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
@@ -810,7 +943,7 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <div class="wrap">
     <div class="head" data-rv>
       <h2 id="h-demo" data-i18n="d.h2">Se, hvordan en AI-medarbejder arbejder.</h2>
-      <p class="intro" data-i18n="d.intro">Vælg en opgave, og klik dig igennem de fire trin.</p>
+      <p class="intro" data-i18n="d.intro">Vælg en opgave, og tryk start. Så udfører AI-medarbejderen den, mens I ser med.</p>
     </div>
     <div data-rv>
       <div class="tabs" role="tablist" aria-labelledby="h-demo" id="demo-tabs">
@@ -819,26 +952,35 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
         <button class="tab" role="tab" type="button" id="tab-2" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-i18n="d.t2">Undersøge nye leads</button>
       </div>
       <div class="dm" role="tabpanel" id="demo-panel" aria-labelledby="tab-0">
-        <ol class="dm-steps" id="demo-steps" aria-label="Trin"></ol>
+        <div>
+          <div class="task">
+            <div class="task-h"><span data-i18n="d.task">Opgaven</span><span id="demo-where"></span></div>
+            <div class="inc" id="demo-in"></div>
+            <button class="btn btn-gold" type="button" id="demo-start">Start AI-medarbejderen</button>
+          </div>
+          <ol class="dm-steps" id="demo-steps" aria-label="Trin"></ol>
+        </div>
         <div class="screen" id="demo-screen">
           <div class="screen-top">
-            <div class="status" aria-live="polite"><span class="led" aria-hidden="true"></span><span id="demo-status"></span></div>
-            <div class="count"><span id="demo-count"></span><span class="bar" aria-hidden="true"><i id="demo-bar"></i></span></div>
+            <div class="status" role="status"><span class="led" aria-hidden="true"></span><span id="demo-status"></span></div>
+            <span class="sysb"><span id="demo-sysl"></span> <b id="demo-sys"></b></span>
+            <span class="sim" data-i18n="d.sim">Simulation</span>
           </div>
           <div class="screen-body">
-            <h3 id="demo-title"></h3>
-            <p id="demo-text"></p>
-            <dl class="rows" id="demo-rows"></dl>
-            <div id="demo-result"></div>
-            <div class="screen-foot">
-              <button class="btn btn-ghost" type="button" id="demo-prev" data-i18n="d.prev">Forrige</button>
-              <button class="btn btn-primary" type="button" id="demo-next"><span id="demo-next-l"></span><svg class="arr" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <div class="pane">
+              <h3 data-i18n="d.log">Aktivitetslog</h3>
+              <ol class="log" id="demo-log" role="log" aria-live="polite"></ol>
+            </div>
+            <div class="pane">
+              <h3 data-i18n="d.data">Fundne oplysninger</h3>
+              <dl class="data" id="demo-data"></dl>
             </div>
           </div>
+          <div class="screen-foot" id="demo-foot"></div>
         </div>
       </div>
-      <p class="demo-note" data-i18n="d.note">Illustration med opdigtede data. Demonstrationen er ikke koblet til et rigtigt system.</p>
-      <noscript><p class="demo-note">Demonstrationen kræver JavaScript. De fire trin er: AI-agenten læser, finder oplysningerne, lægger et udkast klar, og en medarbejder godkender.</p></noscript>
+      <p class="demo-note" data-i18n="d.note">Simulation med opdigtede data. Demonstrationen er ikke forbundet til rigtige virksomhedssystemer.</p>
+      <noscript><p class="demo-note">Demonstrationen kræver JavaScript. Forløbet er: AI-agenten læser, finder oplysningerne, lægger et udkast klar, og en medarbejder godkender.</p></noscript>
     </div>
   </div>
 </section>
@@ -847,13 +989,13 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
 <section id="proces" aria-labelledby="h-proc">
   <div class="wrap">
     <div class="head" data-rv>
-      <h2 id="h-proc" data-i18n="p.h2">Fra tidskrævende opgave til automatisk arbejdsgang.</h2>
+      <h2 id="h-proc" data-i18n="p.h2">Sådan foregår det, når vi automatiserer en opgave.</h2>
     </div>
     <ol class="proc" data-rv="list">
-      <li><div class="n" aria-hidden="true">1</div><h3 data-i18n="p1.h">Vi finder opgaverne</h3><p data-i18n="p1.p">Vi undersøger, hvilke gentagne opgaver der tager tid hos jer.</p></li>
+      <li><div class="n" aria-hidden="true">1</div><h3 data-i18n="p1.h">Vi finder opgaverne</h3><p data-i18n="p1.p">Vi tager en snak om, hvilke opgaver der gentager sig og tager tid hos jer.</p></li>
       <li><div class="n" aria-hidden="true">2</div><h3 data-i18n="p2.h">Vi bygger løsningen</h3><p data-i18n="p2.p">Vi udvikler en AI-agent eller en automatisering, der løser opgaven.</p></li>
-      <li><div class="n" aria-hidden="true">3</div><h3 data-i18n="p3.h">Vi forbinder systemerne</h3><p data-i18n="p3.p">Løsningen kobles til de systemer, I allerede bruger.</p></li>
-      <li><div class="n" aria-hidden="true">4</div><h3 data-i18n="p4.h">Vi optimerer</h3><p data-i18n="p4.p">Vi følger op og forbedrer løsningen, så den virker i hverdagen.</p></li>
+      <li><div class="n" aria-hidden="true">3</div><h3 data-i18n="p3.h">Vi forbinder systemerne</h3><p data-i18n="p3.p">Vi kobler løsningen til de systemer, I allerede bruger.</p></li>
+      <li><div class="n" aria-hidden="true">4</div><h3 data-i18n="p4.h">Vi følger op</h3><p data-i18n="p4.p">Vi ser, hvordan løsningen klarer sig i hverdagen, og retter den til.</p></li>
     </ol>
   </div>
 </section>
@@ -861,18 +1003,48 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
 <!-- 7 · EGEN CASE -->
 <section class="k0 tone" aria-labelledby="h-k">
   <div class="wrap">
-    <div data-rv>
+    <div class="head" data-rv>
       <h2 id="h-k" data-i18n="k.h2">Vi bruger selv det, vi sælger.</h2>
-      <p class="intro muted" data-i18n="k.intro">Nordagent er vores egen første kunde. Det, vi anbefaler jer, kører hos os først, og vi deler, hvad det sparer, og hvad der gik galt.</p>
+      <p class="intro muted" data-i18n="k.intro">Vi er vores egen første kunde. Det, vi anbefaler jer, har vi først prøvet på os selv, og vi fortæller gerne, hvad der gik galt undervejs.</p>
     </div>
-    <div data-rv>
-      <ol>
-        <li><svg width="18" height="18" aria-hidden="true" style="color:var(--accent)"><use href="#i-check"/></svg><span data-i18n="k1">Nye leads researches og kvalificeres automatisk hver uge. Et menneske ringer.</span></li>
-        <li><svg width="18" height="18" aria-hidden="true" style="color:var(--accent)"><use href="#i-check"/></svg><span data-i18n="k2">LinkedIn-opslag skrives og sættes i kø. Kristian godkender hvert enkelt.</span></li>
-        <li><svg width="18" height="18" aria-hidden="true" style="color:var(--accent)"><use href="#i-check"/></svg><span data-i18n="k3">Indbakken sorteres, og udkast til svar ligger klar om morgenen.</span></li>
-      </ol>
-      <p class="note" data-i18n="k.note">Tal på sparet tid kommer her, når vi har målt tre måneder. Vi skriver ikke tal, vi ikke har.</p>
+    <div class="lanes" data-rv="list">
+      <article class="lane">
+        <div>
+          <h3><span data-i18n="k1.h">Nye kundeemner</span><span class="live-pill"><i></i><span data-i18n="k.live">Kører hos os</span></span></h3>
+          <p data-i18n="k1">Hver uge finder en agent nye virksomheder og vurderer, om de passer til os. Et menneske ringer.</p>
+        </div>
+        <ol class="flowrow">
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k1.a">Hver uge finder agenten nye virksomheder</span></li>
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k1.b">Den undersøger dem</span></li>
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k1.c">Den vurderer, hvem der passer</span></li>
+          <li class="hum"><span class="by"><svg width="14" height="14" aria-hidden="true"><use href="#i-person"/></svg><span data-i18n="k.hum">Menneske</span></span><span data-i18n="k1.d">Et menneske ringer</span></li>
+        </ol>
+      </article>
+      <article class="lane">
+        <div>
+          <h3><span data-i18n="k2.h">LinkedIn-opslag</span><span class="live-pill"><i></i><span data-i18n="k.live">Kører hos os</span></span></h3>
+          <p data-i18n="k2">En agent skriver udkast til vores LinkedIn-opslag og sætter dem i kø. Kristian godkender hvert enkelt.</p>
+        </div>
+        <ol class="flowrow">
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k2.a">Agenten skriver et udkast</span></li>
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k2.b">Den sætter opslaget i kø</span></li>
+          <li class="hum"><span class="by"><svg width="14" height="14" aria-hidden="true"><use href="#i-person"/></svg><span data-i18n="k.hum">Menneske</span></span><span data-i18n="k2.c">Kristian godkender hvert enkelt</span></li>
+        </ol>
+      </article>
+      <article class="lane">
+        <div>
+          <h3><span data-i18n="k3.h">Indbakken</span><span class="live-pill"><i></i><span data-i18n="k.live">Kører hos os</span></span></h3>
+          <p data-i18n="k3">En agent sorterer indbakken, og om morgenen ligger der udkast til svar klar.</p>
+        </div>
+        <ol class="flowrow">
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k3.a">En mail kommer ind</span></li>
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k3.b">Agenten sorterer den</span></li>
+          <li><span class="by ai"><svg width="14" height="14" aria-hidden="true"><use href="#i-agent"/></svg><span data-i18n="k.auto">Automatisk</span></span><span data-i18n="k3.c">Et svarudkast ligger klar om morgenen</span></li>
+          <li class="hum"><span class="by"><svg width="14" height="14" aria-hidden="true"><use href="#i-person"/></svg><span data-i18n="k.hum">Menneske</span></span><span data-i18n="k3.d">Vi læser og sender selv</span></li>
+        </ol>
+      </article>
     </div>
+    <p class="note" data-rv data-i18n="k.note">Tal på sparet tid kommer her, når vi har målt i tre måneder. Indtil da skriver vi ingen tal.</p>
   </div>
 </section>
 
@@ -880,15 +1052,53 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
 <section id="tryghed" class="trust" aria-labelledby="h-t">
   <div class="wrap">
     <div class="head" data-rv>
-      <h2 id="h-t" data-i18n="t.h2">AI skal gøre arbejdet lettere. Ikke gøre det mere kompliceret.</h2>
-      <p class="intro muted" data-i18n="t.intro">Løsningerne passer ind i den måde, I arbejder på i forvejen.</p>
+      <h2 id="h-t" data-i18n="t.h2">AI skal gøre jeres arbejde lettere.</h2>
+      <p class="intro muted" data-i18n="t.intro">Derfor passer løsningerne ind i den måde, I arbejder på i forvejen.</p>
     </div>
-    <ul data-rv>
-      <li><strong data-i18n="t1.h">I godkender.</strong><span data-i18n="t1.t">Agenten foreslår, et menneske beslutter. Alt logges, så I kan se, hvad der er sket, og hvorfor.</span></li>
-      <li><strong data-i18n="t2.h">Intet systemskifte.</strong><span data-i18n="t2.t">Vi bygger ved siden af e-conomic, Outlook og det, I har. Ingen migrering, ingen indlåsning.</span></li>
-      <li><strong data-i18n="t3.h">Data behandles i EU.</strong><span data-i18n="t3.t">Hosting i Tyskland, AI-behandling i AWS' EU-regioner, og en databehandleraftale, vi kan forklare linje for linje.</span></li>
-      <li><strong data-i18n="t4.h">Vi siger det også, når noget ikke skal automatiseres.</strong><span data-i18n="t4.t">Ikke alle rutiner er det værd. Den vurdering får I først, og den er gratis.</span></li>
-    </ul>
+    <div class="tgrid" data-rv="list">
+      <article class="tcard dk on-dark">
+        <h3 data-i18n="t1.h">Mennesket har kontrollen</h3>
+        <p data-i18n="t1.t">AI-agenten gør arbejdet, og en medarbejder kan se resultatet igennem og godkende det. Alt bliver skrevet i en log, så I kan se, hvad agenten har gjort og hvorfor.</p>
+        <div class="tvis" aria-hidden="true">
+          <div class="appr">
+            <div class="appr-top"><span data-i18n="t1.v">Udkast klar til godkendelse</span><span class="appr-btns"><span class="fake y" data-i18n="st.okw">Godkend</span><span class="fake n" data-i18n="t1.n">Send tilbage</span></span></div>
+            <ul>
+              <li><svg width="13" height="13"><use href="#i-check"/></svg><span data-i18n="t1.l1">Agenten læste fakturaen</span></li>
+              <li><svg width="13" height="13"><use href="#i-check"/></svg><span data-i18n="t1.l2">Agenten oprettede et udkast</span></li>
+              <li><svg width="13" height="13"><use href="#i-person"/></svg><span data-i18n="t1.l3">Venter på en medarbejder</span></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+      <article class="tcard">
+        <h3 data-i18n="t3.h">Data behandles i EU</h3>
+        <p data-i18n="t3.t">Vi sender kun de oplysninger til AI-modellen, som opgaven kræver, og vi bruger kun jeres data til jeres egen løsning.</p>
+        <!-- Underleverandører: ret her, hvis hosting eller AI-leverandør ændrer sig -->
+        <dl class="facts">
+          <div><dt data-i18n="t3.k1">Hosting</dt><dd data-i18n="t3.v1">Hetzner, Tyskland</dd></div>
+          <div><dt data-i18n="t3.k2">AI-behandling</dt><dd data-i18n="t3.v2">Amazon Web Services, EU-regioner</dd></div>
+          <div><dt data-i18n="t3.k3">Aftale</dt><dd data-i18n="t3.v3">Databehandleraftale, som vi gennemgår med jer</dd></div>
+        </dl>
+      </article>
+      <article class="tcard">
+        <h3 data-i18n="t2.h">Intet systemskifte</h3>
+        <p data-i18n="t2.t">Vi bygger ved siden af de systemer, I allerede har. I skal ikke flytte data, og I er ikke bundet til os.</p>
+        <div class="tvis" aria-hidden="true">
+          <div class="sysrow"><span class="chip">e-conomic</span><span class="chip">Dinero</span><span class="chip">Billy</span><span class="chip">Outlook</span><span class="chip">Microsoft 365</span><span class="chip">HubSpot</span><span class="chip add" data-i18n="t2.add">+ AI-agent</span></div>
+        </div>
+      </article>
+      <article class="tcard">
+        <h3 data-i18n="t4.h">Ærlig rådgivning</h3>
+        <p data-i18n="t4.t">Nogle opgaver kan det ikke betale sig at automatisere. Det siger vi, før I har brugt penge på det.</p>
+        <p data-i18n="t4.t2">Den første vurdering er gratis.</p>
+        <div class="tvis" aria-hidden="true">
+          <ul class="verd">
+            <li><span data-i18n="t4.a1">Gentager sig og følger faste regler</span><b data-i18n="t4.b1">Værd at automatisere</b></li>
+            <li><span data-i18n="t4.a2">Kræver en ny vurdering hver gang</span><b class="no" data-i18n="t4.b2">Bliver hos et menneske</b></li>
+          </ul>
+        </div>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -897,13 +1107,32 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
   <span id="om"></span>
   <div class="wrap">
     <div class="head" data-rv>
-      <h2 id="h-o" data-i18n="o.h2">To stiftere. Én kontaktperson.</h2>
-      <p class="intro muted" data-i18n="o.intro">Én bygger, én lytter. I får den samme person fra første møde, til løsningen kører.</p>
+      <h2 id="h-o" data-i18n="o.h2">Hvem I kommer til at arbejde med</h2>
+      <p class="intro muted" data-i18n="o.intro">Nordagent er Kristian og Mads. Kristian bygger, og Mads er jeres faste kontakt hele vejen.</p>
     </div>
     <div class="ppl" data-rv="list">
-      <!-- Pladsholder: udskift .av med <img> når der er et rigtigt portræt -->
-      <div class="p"><div class="av" aria-hidden="true">K</div><div><h3>Kristian Ibsen</h3><div class="role" data-i18n="o.k.role">CEO &amp; MEDSTIFTER · ØKONOMI &amp; IT</div><p class="muted" data-i18n="o.k.t">Bygger løsningerne og står for teknik, drift og datasikkerhed.</p><a class="li" href="https://www.linkedin.com/in/kristian-ibsen-a72a5b295" rel="noopener">LinkedIn<svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div>
-      <div class="p"><div class="av" aria-hidden="true">M</div><div><h3>Mads Clausen</h3><div class="role" data-i18n="o.m.role">CSO &amp; MEDSTIFTER · SALG &amp; RELATIONER</div><p class="muted" data-i18n="o.m.t">Jeres faste kontakt, fra første møde til løsningen kører i drift.</p><a class="li" href="https://www.linkedin.com/in/mads-clausen-711801403/" rel="noopener">LinkedIn<svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div>
+      <article class="p">
+        <!-- PORTRÆT: indsæt <img src="/kristian.jpg" alt="Kristian Ibsen" width="480" height="600"> som første element i .portrait. Så skjules initialet automatisk. -->
+        <div class="portrait"><span aria-hidden="true">K</span></div>
+        <div>
+          <p class="does" data-i18n="o.k.does">Bygger løsningerne</p>
+          <h3>Kristian Ibsen</h3>
+          <div class="role" data-i18n="o.k.role">CEO &amp; MEDSTIFTER · ØKONOMI &amp; IT</div>
+          <p class="muted" data-i18n="o.k.t">Står for teknik, drift og datasikkerhed.</p>
+          <a class="li" href="https://www.linkedin.com/in/kristian-ibsen-a72a5b295" rel="noopener"><span data-i18n="o.k.li">Kristian på LinkedIn</span><svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <article class="p">
+        <!-- PORTRÆT: indsæt <img src="/mads.jpg" alt="Mads Clausen" width="480" height="600"> som første element i .portrait. Så skjules initialet automatisk. -->
+        <div class="portrait"><span aria-hidden="true">M</span></div>
+        <div>
+          <p class="does" data-i18n="o.m.does">Jeres faste kontakt</p>
+          <h3>Mads Clausen</h3>
+          <div class="role" data-i18n="o.m.role">CSO &amp; MEDSTIFTER · SALG &amp; RELATIONER</div>
+          <p class="muted" data-i18n="o.m.t">Er med fra det første møde, til løsningen kører hos jer.</p>
+          <a class="li" href="https://www.linkedin.com/in/mads-clausen-711801403/" rel="noopener"><span data-i18n="o.m.li">Mads på LinkedIn</span><svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -915,27 +1144,73 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
       <h2 id="h-f" data-i18n="f.h2">Spørgsmål, vi ofte får</h2>
     </div>
     <div class="list" data-rv>
-      <details><summary data-i18n="f1.q">Hvad hvis agenten laver fejl?</summary><p data-i18n="f1.a">Agenter sættes op med godkendelsestrin: de gør arbejdet, og I godkender det sidste klik, indtil tilliden er bygget op. Alt logges, så I altid kan se, hvad der er sket, og hvorfor.</p></details>
-      <details><summary data-i18n="f2.q">Hvad med GDPR og vores data?</summary><p data-i18n="f2.a">Serverne står i Tyskland, og AI-behandlingen sker i AWS' EU-regioner. Vi indgår en databehandleraftale med jer og sender kun de oplysninger til AI-modellen, som opgaven kræver. Jeres data bruges kun til jeres løsning.</p></details>
-      <details><summary data-i18n="f3.q">Vi bruger allerede ChatGPT eller Copilot. Er det ikke nok?</summary><p data-i18n="f3.a">Det er en god start, og til nogle opgaver er det nok. Men så længe en medarbejder skal kopiere tekst ind og ud, ligger arbejdet der stadig. Gevinsten ved automatisering kommer, når systemerne begynder at udveksle oplysninger selv.</p></details>
-      <details><summary data-i18n="f4.q">Hvor lang tid tager det?</summary><p data-i18n="f4.a">Vi starter altid med det mindste skridt, der giver mærkbar værdi. En opsætning tager dage, et første workflow typisk få uger.</p></details>
-      <details><summary data-i18n="f5.q">Hvad koster det?</summary><p data-i18n="f5.a">I får en fast pris, før vi går i gang, aftalt efter den første snak. Ingen timeafregning og ingen overraskende regninger.</p></details>
+      <details><summary data-i18n="f1.q">Hvad hvis agenten laver fejl?</summary><p data-i18n="f1.a">Vi sætter agenten op, så den gør arbejdet, og I godkender, før noget bliver sendt eller bogført. Sådan fortsætter det, til I stoler på den. Alt bliver skrevet i en log, så I kan se, hvad den har gjort og hvorfor.</p></details>
+      <details><summary data-i18n="f2.q">Hvad med GDPR og vores data?</summary><p data-i18n="f2.a">Serverne står i Tyskland, og AI-behandlingen sker i AWS' EU-regioner. Vi indgår en databehandleraftale med jer og sender kun de oplysninger til AI-modellen, som opgaven kræver. Vi bruger kun jeres data til jeres egen løsning.</p></details>
+      <details><summary data-i18n="f3.q">Vi bruger allerede ChatGPT eller Copilot. Er det ikke nok?</summary><p data-i18n="f3.a">Det er en god start, og til nogle opgaver er det nok. Men så længe en medarbejder skal kopiere tekst ind og ud, ligger arbejdet der stadig. En automatisering henter og afleverer selv oplysningerne i jeres systemer, så ingen skal kopiere.</p></details>
+      <details><summary data-i18n="f4.q">Hvor lang tid tager det?</summary><p data-i18n="f4.a">Vi begynder med én lille opgave, som I kan mærke i hverdagen. En opsætning tager nogle dage, og den første arbejdsgang tager typisk få uger.</p></details>
+      <details><summary data-i18n="f5.q">Hvad koster det?</summary><p data-i18n="f5.a">I får en fast pris efter den første snak, før vi går i gang. Vi afregner ikke pr. time, så prisen ændrer sig ikke undervejs.</p></details>
     </div>
   </div>
 </section>
 
-<!-- 10 · AFSLUTTENDE CTA -->
+<!-- 10 · KONTAKT -->
 <section id="kontakt" class="cta on-dark" aria-labelledby="h-c">
   <span id="book"></span>
   <div class="wrap">
-    <h2 id="h-c" data-i18n="c.h2">Hvilke opgaver kunne I slippe for?</h2>
-    <p data-i18n="c.text">Fortæl os, hvad der tager tid i jeres virksomhed. Så undersøger vi, om det kan automatiseres.</p>
-    <div class="actions">
-      <!-- TODO: erstat href med rigtigt bookinglink (Google Kalender aftaleplan / Calendly), når det findes -->
-      <a class="btn btn-light" href="mailto:kontakt@nordagent.dk?subject=Lad%20os%20tage%20en%20snak" data-todo="bookinglink" data-i18n="c.book">Lad os tage en snak</a>
-      <a class="btn btn-outline-light" href="mailto:kontakt@nordagent.dk" data-i18n="c.mail">Eller skriv: kontakt@nordagent.dk</a>
+    <div>
+      <h2 id="h-c" data-i18n="c.h2">Hvilke opgaver kunne I slippe for?</h2>
+      <p class="lead" data-i18n="c.text">Fortæl os, hvad der tager tid i jeres virksomhed. Så undersøger vi, om det kan automatiseres.</p>
+      <ol class="next">
+        <li><span data-i18n="c.n1">I beskriver opgaven med et par linjer.</span></li>
+        <li><span data-i18n="c.n2">Vi svarer på mail og foreslår en kort snak.</span></li>
+        <li><span data-i18n="c.n3">I får en ærlig vurdering. Den er gratis og uforpligtende.</span></li>
+      </ol>
+      <p class="alt"><span data-i18n="c.alt">Hellere en almindelig mail?</span> <a href="mailto:kontakt@nordagent.dk">kontakt@nordagent.dk</a></p>
     </div>
-    <p class="fine" data-i18n="c.fine">Knappen åbner en e-mail til os. Det er uforpligtende.</p>
+    <!--
+      KONTAKTFORMULAR
+      Sitet er statisk og har ingen backend. Derfor:
+      - Når data-endpoint er tomt, laver formularen en færdig e-mail til kontakt@nordagent.dk med felterne udfyldt.
+      - Når data-endpoint indeholder en adresse, sendes felterne dertil med POST (FormData), og der vises kvittering eller fejl.
+      For at aktivere direkte afsendelse: indsæt adressen på jeres modtager (fx en n8n-webhook eller en formular-tjeneste) i data-endpoint.
+      Modtageren skal svare med status 2xx og tillade forespørgsler fra https://nordagent.dk (CORS).
+    -->
+    <form class="form" id="contact-form" data-endpoint="" action="mailto:kontakt@nordagent.dk" method="post" enctype="text/plain">
+      <div class="fstatus" id="form-status" tabindex="-1"></div>
+      <div class="ffields">
+        <div class="fgrid">
+          <div class="field" data-f="name">
+            <label for="f-name" data-i18n="c.f.name">Navn</label>
+            <input id="f-name" name="navn" type="text" autocomplete="name" required maxlength="80" aria-describedby="e-name">
+            <p class="msg" id="e-name" role="alert"></p>
+          </div>
+          <div class="field" data-f="company">
+            <label for="f-company"><span data-i18n="c.f.company">Virksomhed</span> <span class="opt" data-i18n="c.f.opt">(valgfrit)</span></label>
+            <input id="f-company" name="virksomhed" type="text" autocomplete="organization" maxlength="80">
+          </div>
+        </div>
+        <div class="field" data-f="email">
+          <label for="f-email" data-i18n="c.f.email">E-mail</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="120" aria-describedby="e-email">
+          <p class="msg" id="e-email" role="alert"></p>
+        </div>
+        <div class="field" data-f="task">
+          <label for="f-task" data-i18n="c.f.task">Hvilken opgave vil I gerne automatisere?</label>
+          <input id="f-task" name="opgave" type="text" required maxlength="140" placeholder="Fx fakturaer eller kundemails" data-i18n-ph="c.f.taskph" aria-describedby="e-task">
+          <p class="msg" id="e-task" role="alert"></p>
+        </div>
+        <div class="field" data-f="more">
+          <label for="f-more"><span data-i18n="c.f.more">Uddyb gerne</span> <span class="opt" data-i18n="c.f.opt">(valgfrit)</span></label>
+          <textarea id="f-more" name="beskrivelse" maxlength="1200" rows="4"></textarea>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="f-web">Udfyld ikke dette felt</label><input id="f-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="send">
+          <button class="btn btn-primary" type="submit" id="form-send">Send besked</button>
+          <p class="hint" id="form-hint"></p>
+        </div>
+        <p class="legal" data-i18n-html="c.f.legal">Vi bruger kun oplysningerne til at svare jer. Læs vores <a href="/privatlivspolitik.html">privatlivspolitik</a>.</p>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -943,12 +1218,43 @@ footer li a{display:inline-flex;align-items:center;min-height:44px;padding:0 10p
 
 <footer>
   <div class="wrap">
-    <div class="fbrand"><img src="/na-monogram.png" alt="" width="36" height="20"><strong>NORDAGENT</strong> ApS · <span data-i18n="ft.cvr">CVR følger</span></div>
-    <ul>
-      <li><a href="#ydelser" data-i18n="nav.what">Hvad vi laver</a></li><li><a href="#eksempler" data-i18n="nav.ex">Eksempler</a></li><li><a href="#om-os" data-i18n="nav.about">Om os</a></li><li><a href="mailto:kontakt@nordagent.dk">kontakt@nordagent.dk</a></li><li><a href="/privatlivspolitik.html" data-i18n="ft.privacy">Privatlivspolitik</a></li>
-      <li><div class="lang" role="group" aria-label="Sprog / Language"><button type="button" id="footer-btn-da" aria-pressed="true" onclick="setLanguage('da')">DA</button><span aria-hidden="true">/</span><button type="button" id="footer-btn-en" aria-pressed="false" onclick="setLanguage('en')">EN</button></div></li>
-    </ul>
-    <div>© 2026 Nordagent ApS</div>
+    <div class="fcols">
+      <div>
+        <div class="fbrand"><img src="/na-monogram.png" alt="" width="36" height="20"><strong>NORDAGENT</strong></div>
+        <p class="fabout" data-i18n="ft.about">AI-agenter og automatiserede arbejdsgange til danske virksomheder.</p>
+        <div class="lang" role="group" aria-label="Sprog / Language" style="margin-top:8px"><button type="button" id="footer-btn-da" aria-pressed="true" onclick="setLanguage('da')">DA</button><span aria-hidden="true">/</span><button type="button" id="footer-btn-en" aria-pressed="false" onclick="setLanguage('en')">EN</button></div>
+      </div>
+      <div>
+        <p class="fh" data-i18n="ft.h1">Sider</p>
+        <ul>
+          <li><a href="#ydelser" data-i18n="nav.what">Hvad vi laver</a></li>
+          <li><a href="#eksempler" data-i18n="nav.ex">Eksempler</a></li>
+          <li><a href="#demo" data-i18n="ft.demo">Demonstration</a></li>
+          <li><a href="#tryghed" data-i18n="ft.trust">Tryghed og data</a></li>
+          <li><a href="#om-os" data-i18n="nav.about">Om os</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="fh" data-i18n="ft.h2">Kontakt</p>
+        <ul>
+          <li><a href="mailto:kontakt@nordagent.dk">kontakt@nordagent.dk</a></li>
+          <li><a href="#kontakt" data-i18n="ft.form">Kontaktformular</a></li>
+          <li><a href="https://www.linkedin.com/in/kristian-ibsen-a72a5b295" rel="noopener" data-i18n="o.k.li">Kristian på LinkedIn</a></li>
+          <li><a href="https://www.linkedin.com/in/mads-clausen-711801403/" rel="noopener" data-i18n="o.m.li">Mads på LinkedIn</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="fh" data-i18n="ft.h3">Virksomhed</p>
+        <ul>
+          <li class="plain">Nordagent ApS</li>
+          <!-- TODO CVR: erstat "CVR følger" med "CVR 12345678", når nummeret er klar. Ret også ordbogen (ft.cvr) i scriptet nederst. -->
+          <li class="plain" data-todo="cvr" data-i18n="ft.cvr">CVR følger</li>
+          <li><a href="/privatlivspolitik.html" data-i18n="ft.privacy">Privatlivspolitik</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot"><span>© 2026 Nordagent ApS</span></div>
   </div>
 </footer>
 
@@ -976,94 +1282,124 @@ const EN={
 "skip":"Skip to content",
 "nav.home":"Home","nav.what":"What we do","nav.ex":"Examples","nav.about":"About us","nav.contact":"Contact","nav.cta":"Let's talk",
 "hero.h1":"We make your tedious computer work <span class=\"em\">take care of itself.</span>",
-"hero.lead":"Nordagent builds AI employees and automated workflows that handle your company's repetitive tasks – so your people get more time for what really matters.",
+"hero.lead":"Nordagent builds AI employees and automated workflows that take care of your company's repetitive tasks, so your people have time for customers and the skilled work.",
 "hero.cta1":"Find out what we can automate","hero.cta2":"See how it works",
 "hero.small":"No system change · You approve · Data processed in the EU",
-"st.mail":"New email","st.att":"invoice.pdf","st.sup":"Example Ltd","st.slot":"Accounting system","st.inv":"Invoice","st.no":"no. 2041","st.f1":"Supplier","st.f2":"Amount","st.f3":"Date","st.amt":"DKK 4,250.00","st.date":"12 Nov 2026",
-"st.draft":"Draft in the accounting system","st.draftv":"Example Ltd · DKK 4,250.00","st.okd":"Approved","st.okw":"Approve",
-"st.1":"An email with an invoice arrives","st.2":"The AI agent reads the email and the invoice","st.3":"It finds the supplier, amount and date","st.4":"It creates a draft in the accounting system","st.5":"An employee approves",
+"st.1":"An invoice arrives in Outlook","st.2":"The AI agent reads the invoice","st.3":"It finds the supplier, amount and invoice date","st.4":"It sends the details to the accounting system","st.5":"An employee approves",
+"st.w1":"No new mail","st.w2":"Waiting for an invoice","st.w3":"Waiting for details",
+"st.sup":"Example Ltd","st.subj":"Invoice for November","st.att":"invoice.pdf","st.agent":"AI agent","st.inv":"Invoice","st.no":"no. 2041","st.amt":"DKK 4,250.00","st.date":"12 Nov 2026",
+"st.f1":"Supplier","st.f2":"Amount","st.f3":"Date","st.slot":"Accounting system",
+"st.draft":"Draft for posting","st.draftv":"Example Ltd · DKK 4,250.00","st.okd":"Approved","st.okw":"Approve",
 "st.cap":"What a workflow can look like. Illustration with made-up data.",
 "chips.t":"Runs alongside what you already have:","chips.crm":"your CRM",
 "pr.h2":"How much of your working day goes to tasks that repeat themselves?",
-"pr.intro":"Most office work is not hard. It is just the same thing over and over.",
-"pr.b.h":"Before","pr.b.p":"The employee does everything by hand.","pr.a.h":"After","pr.a.p":"The AI agent takes the repetitive steps. The employee stays in control.",
+"pr.intro":"A lot of office work is the same tasks you also did yesterday and last week.",
+"pr.b.h":"Before","pr.b.p":"The employee does everything by hand.","pr.a.h":"After","pr.a.p":"The AI agent takes the repetitive tasks.",
 "pr.1":"Reading and sorting emails","pr.2":"Copying information between systems","pr.3":"Processing invoices and documents","pr.4":"Updating customer data","pr.5":"Following up on potential customers","pr.6":"Preparing reports",
-"pr.hand":"By hand","pr.agent":"The AI agent prepares",
-"pr.b.keep":"And afterwards: the work that actually needs a person.","pr.a.keep":"The employee approves, and has time for the rest.",
-"w.h2":"We build digital employees for your business.","w.intro":"We build them for you. You do not need any technical skills.",
-"w.a.vis":"Reply ready","w.a.h":"AI agents","w.a.p":"Digital helpers that can read, understand, research, write and process information for the business.","w.a.like":"Like a colleague who reads the post and leaves a reply ready for you.",
-"w.b.n1":"Mail","w.b.n2":"Accounting","w.b.h":"Automated workflows","w.b.p":"Workflows that connect the company's systems and automatically move information and carry out actions.","w.b.like":"Like a conveyor belt between your systems.",
-"w.foot":"The agent understands the content. The workflow moves it to where it is needed. Often we build both together.",
-"e.h2":"What can we actually automate?","e.intro":"Six examples of tasks we can build a solution for.",
-"e1.r1":"Invoice for November","e1.t1":"Invoice","e1.r2":"When will my order arrive?","e1.t2":"Customer","e1.r3":"Can we get a quote?","e1.t3":"Sales",
+"pr.hand":"By hand","pr.agent":"The agent handles it",
+"pr.b.keep":"Only then is there time for the work that needs a person.","pr.a.keep":"The employee approves and spends the time on what needs a person.",
+"w.h2":"We build digital employees for your business.","w.intro":"You do not need any technical skills. You only need to tell us how you do the task today.",
+"w.a.vis":"Reply ready","w.a.h":"AI agents","w.a.p":"An AI agent reads emails and documents, understands what they are about and writes a draft you can edit.","w.a.like":"Like a colleague who reads the post and leaves a reply ready for you.",
+"w.b.n1":"Mail","w.b.n2":"Accounting","w.b.h":"Automated workflows","w.b.p":"A workflow moves information from one system to another on its own, for example from an email to the accounting system.","w.b.like":"Like a conveyor belt between your systems.",
+"w.foot":"The agent understands the content, and the workflow moves it to where it is needed. We often build the two together.",
+"e.h2":"What can we actually automate?","e.intro":"Here are six examples. Pick one of the first three to see the workflow step by step.",
 "e1.h":"Email assistant","e1.p":"Sorts incoming emails, works out what they are about and leaves a reply ready.",
 "e2.h":"Invoice processing","e2.p":"Reads invoices, finds the details and gets them ready for the accounting system.",
-"e3.n":"Customer record","e3.f1":"Phone","e3.v1":"Updated","e3.f2":"Last contact","e3.v2":"Today",
-"e3.h":"CRM automation","e3.p":"Updates customer data and notes new information, so nobody has to type it in.",
-"e4.r1":"Company A","e4.r2":"Company B","e4.r3":"Company C","e4.y":"Fits","e4.n":"Does not fit",
-"e4.h":"Lead generation","e4.p":"Finds potential customers, researches the companies and picks out the ones that fit.",
-"e5.d1":"Mon","e5.d2":"Tue","e5.d3":"Wed","e5.d4":"Thu","e5.d5":"Fri","e5.s":"Suggested time sent",
-"e5.h":"Meeting booking","e5.p":"Helps coordinate, follow up and schedule meetings.",
-"e6.s":"The weekly report is ready","e6.h":"Reporting","e6.p":"Gathers figures from the relevant systems and gets the report ready.",
-"d.h2":"See how an AI employee works.","d.intro":"Pick a task and click through the four steps.",
-"d.t0":"Process an invoice","d.t1":"Answer a customer enquiry","d.t2":"Research new leads","d.prev":"Back",
-"d.note":"Illustration with made-up data. The demonstration is not connected to a real system.",
-"p.h2":"From time-consuming task to automatic workflow.",
-"p1.h":"We find the tasks","p1.p":"We look into which repetitive tasks take up time in your business.",
+"e3.h":"CRM automation","e3.p":"Updates customer data and notes new information, so nobody has to type it in.","e3.a":"New detail in an email","e3.b":"The customer record is updated",
+"e4.h":"Lead generation","e4.p":"Finds companies that could become customers, researches them and picks out the ones that fit.",
+"e5.h":"Meeting booking","e5.p":"Finds times, sends suggestions and follows up until the meeting is set.","e5.a":"A customer wants to meet","e5.b":"Suggested times are sent",
+"e6.h":"Reporting","e6.p":"Gathers the figures from your systems and has the report ready on time.","e6.a":"Fixed time every week","e6.b":"The report is ready",
+"e.cta.h":"Does this look like a task of yours?","e.cta.p":"Describe it briefly, and we will assess whether it can be automated.","e.cta.b":"Tell us about the task",
+"d.h2":"See how an AI employee works.","d.intro":"Pick a task and press start. The AI employee then carries it out while you watch.",
+"d.t0":"Process an invoice","d.t1":"Answer a customer enquiry","d.t2":"Research new leads",
+"d.task":"The task","d.sim":"Simulation","d.log":"Activity log","d.data":"Details found",
+"d.note":"Simulation with made-up data. The demonstration is not connected to real business systems.",
+"p.h2":"How it works when we automate a task.",
+"p1.h":"We find the tasks","p1.p":"We talk through which tasks repeat themselves and take up time in your business.",
 "p2.h":"We build the solution","p2.p":"We develop an AI agent or an automation that solves the task.",
-"p3.h":"We connect the systems","p3.p":"The solution is connected to the systems you already use.",
-"p4.h":"We optimise","p4.p":"We follow up and improve the solution so it works in everyday use.",
+"p3.h":"We connect the systems","p3.p":"We connect the solution to the systems you already use.",
+"p4.h":"We follow up","p4.p":"We see how the solution does in everyday use and adjust it.",
 "k.h2":"We use what we sell.",
-"k.intro":"Nordagent is our own first customer. What we recommend to you runs with us first, and we share what it saves and what went wrong.",
-"k1":"New leads are researched and qualified automatically every week. A person makes the call.",
-"k2":"LinkedIn posts are written and queued. Kristian approves every one.",
-"k3":"The inbox is sorted, and draft replies are ready in the morning.",
-"k.note":"Numbers on time saved go here once we have measured three months. We do not write numbers we do not have.",
-"t.h2":"AI should make work easier. Not more complicated.","t.intro":"The solutions fit into the way you already work.",
-"t1.h":"You approve.","t1.t":"The agent proposes, a person decides. Everything is logged, so you can see what happened, and why.",
-"t2.h":"No system change.","t2.t":"We build alongside e-conomic, Outlook and what you have. No migration, no lock-in.",
-"t3.h":"Data processed in the EU.","t3.t":"Hosting in Germany, AI processing in AWS EU regions, and a data processing agreement we can explain line by line.",
-"t4.h":"We also tell you when something should not be automated.","t4.t":"Not every routine is worth it. You get that assessment first, and it is free.",
-"o.h2":"Two founders. One point of contact.","o.intro":"One builds, one listens. You get the same person from the first meeting until the solution is running.",
-"o.k.role":"CEO & CO-FOUNDER · FINANCE & IT","o.k.t":"Builds the solutions and is responsible for technology, operations and data security.",
-"o.m.role":"CSO & CO-FOUNDER · SALES & RELATIONS","o.m.t":"Your fixed contact, from the first meeting until the solution is in operation.",
+"k.intro":"We are our own first customer. What we recommend to you, we have tried on ourselves first, and we are happy to tell you what went wrong along the way.",
+"k.live":"Running with us","k.auto":"Automatic","k.hum":"Person",
+"k1.h":"New leads","k1":"Every week an agent finds new companies and assesses whether they fit us. A person makes the call.",
+"k1.a":"Every week the agent finds new companies","k1.b":"It researches them","k1.c":"It assesses which ones fit","k1.d":"A person makes the call",
+"k2.h":"LinkedIn posts","k2":"An agent drafts our LinkedIn posts and queues them. Kristian approves every one.",
+"k2.a":"The agent writes a draft","k2.b":"It queues the post","k2.c":"Kristian approves every one",
+"k3.h":"The inbox","k3":"An agent sorts the inbox, and in the morning draft replies are ready.",
+"k3.a":"An email arrives","k3.b":"The agent sorts it","k3.c":"A draft reply is ready in the morning","k3.d":"We read and send it ourselves",
+"k.note":"Numbers on time saved go here once we have measured for three months. Until then we write none.",
+"t.h2":"AI should make your work easier.","t.intro":"That is why the solutions fit into the way you already work.",
+"t1.h":"People stay in control","t1.t":"The AI agent does the work, and an employee can check the result and approve it. Everything is written to a log, so you can see what the agent did and why.",
+"t1.v":"Draft ready for approval","t1.n":"Send back","t1.l1":"The agent read the invoice","t1.l2":"The agent created a draft","t1.l3":"Waiting for an employee",
+"t2.h":"No system change","t2.t":"We build alongside the systems you already have. You do not have to move data, and you are not tied to us.","t2.add":"+ AI agent",
+"t3.h":"Data processed in the EU","t3.t":"We only send the AI model the information the task requires, and we only use your data for your own solution.",
+"t3.k1":"Hosting","t3.v1":"Hetzner, Germany","t3.k2":"AI processing","t3.v2":"Amazon Web Services, EU regions","t3.k3":"Agreement","t3.v3":"Data processing agreement, which we go through with you",
+"t4.h":"Honest advice","t4.t":"Some tasks are not worth automating. We tell you so before you have spent money on it.","t4.t2":"The first assessment is free.","t4.a1":"Repeats itself and follows fixed rules","t4.b1":"Worth automating","t4.a2":"Needs a fresh judgement every time","t4.b2":"Stays with a person",
+"o.h2":"Who you will be working with","o.intro":"Nordagent is Kristian and Mads. Kristian builds, and Mads is your point of contact all the way.",
+"o.k.does":"Builds the solutions","o.k.role":"CEO & CO-FOUNDER · FINANCE & IT","o.k.t":"Responsible for technology, operations and data security.","o.k.li":"Kristian on LinkedIn",
+"o.m.does":"Your point of contact","o.m.role":"CSO & CO-FOUNDER · SALES & RELATIONS","o.m.t":"With you from the first meeting until the solution is running.","o.m.li":"Mads on LinkedIn",
 "f.h2":"Questions we often get",
-"f1.q":"What if the agent makes mistakes?","f1.a":"Agents are set up with approval steps: they do the work, and you approve the final click until trust is built. Everything is logged, so you can always see what happened, and why.",
-"f2.q":"What about GDPR and our data?","f2.a":"The servers are in Germany, and AI processing takes place in AWS EU regions. We sign a data processing agreement with you and only send the AI model the information the task requires. Your data is used only for your solution.",
-"f3.q":"We already use ChatGPT or Copilot. Isn't that enough?","f3.a":"It is a good start, and for some tasks it is enough. But as long as an employee has to copy text in and out, the work is still there. The gain from automation comes when the systems start exchanging information on their own.",
-"f4.q":"How long does it take?","f4.a":"We always start with the smallest step that gives noticeable value. A set-up takes days, a first workflow typically a few weeks.",
-"f5.q":"What does it cost?","f5.a":"You get a fixed price before we start, agreed after the first conversation. No hourly billing and no surprise invoices.",
+"f1.q":"What if the agent makes mistakes?","f1.a":"We set the agent up so that it does the work and you approve before anything is sent or posted. It stays that way until you trust it. Everything is written to a log, so you can see what it did and why.",
+"f2.q":"What about GDPR and our data?","f2.a":"The servers are in Germany, and AI processing takes place in AWS EU regions. We sign a data processing agreement with you and only send the AI model the information the task requires. We only use your data for your own solution.",
+"f3.q":"We already use ChatGPT or Copilot. Isn't that enough?","f3.a":"It is a good start, and for some tasks it is enough. But as long as an employee has to copy text in and out, the work is still there. An automation fetches and delivers the information in your systems itself, so nobody has to copy.",
+"f4.q":"How long does it take?","f4.a":"We start with one small task that you will notice in everyday work. A set-up takes a few days, and the first workflow typically takes a few weeks.",
+"f5.q":"What does it cost?","f5.a":"You get a fixed price after the first conversation, before we start. We do not bill by the hour, so the price does not change along the way.",
 "c.h2":"Which tasks could you do without?","c.text":"Tell us what takes up time in your business. Then we will look into whether it can be automated.",
-"c.book":"Let's talk","c.mail":"Or write: kontakt@nordagent.dk","c.fine":"The button opens an email to us. No obligation.",
+"c.n1":"You describe the task in a couple of lines.","c.n2":"We reply by email and suggest a short conversation.","c.n3":"You get an honest assessment. It is free and without obligation.",
+"c.alt":"Prefer a plain email?",
+"c.f.name":"Name","c.f.company":"Company","c.f.opt":"(optional)","c.f.email":"Email","c.f.task":"Which task would you like to automate?","c.f.taskph":"E.g. invoices or customer emails","c.f.more":"Feel free to elaborate",
+"c.f.legal":"We only use the information to reply to you. Read our <a href=\"/privatlivspolitik.html\">privacy policy</a>.",
+"ft.about":"AI agents and automated workflows for Danish businesses.","ft.h1":"Pages","ft.h2":"Contact","ft.h3":"Company","ft.demo":"Demonstration","ft.trust":"Trust and data","ft.form":"Contact form",
 "ft.cvr":"CVR to follow","ft.privacy":"Privacy policy",
 "ck.text":"We use cookies to understand how visitors use the site (Google Analytics). <a href=\"/privatlivspolitik.html\">Read more</a>","ck.no":"Decline","ck.yes":"Accept"
 };
 const DA={};
-document.querySelectorAll('[data-i18n],[data-i18n-html]').forEach(el=>{const k=el.dataset.i18n||el.dataset.i18nHtml; if(!(k in DA)) DA[k]=el.dataset.i18nHtml?el.innerHTML:el.textContent;});
+document.querySelectorAll('[data-i18n],[data-i18n-html],[data-i18n-ph]').forEach(el=>{
+  const k=el.dataset.i18n||el.dataset.i18nHtml; if(k && !(k in DA)) DA[k]=el.dataset.i18nHtml?el.innerHTML:el.textContent;
+  const p=el.dataset.i18nPh; if(p && !(p in DA)) DA[p]=el.getAttribute('placeholder');
+});
 let LANG='da';
+function el(tag,cls,txt){const e=document.createElement(tag); if(cls) e.className=cls; if(txt!==undefined) e.textContent=txt; return e;}
+function icon(id,size){const s=document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('width',size||14); s.setAttribute('height',size||14); s.setAttribute('aria-hidden','true'); const u=document.createElementNS('http://www.w3.org/2000/svg','use'); u.setAttribute('href','#'+id); s.append(u); return s;}
 
-// ── Hero: arbejdsgangen, der kører af sig selv ──
+// ── Hero: fakturaen går fra Outlook til økonomisystemet ──
 const STAGE_TX={
-  da:{s:["Venter på post","Ny e-mail modtaget","Læser e-mail og faktura","Finder oplysningerne","Opretter udkast","Venter på godkendelse","Godkendt af en medarbejder"],tog:["Sæt animationen på pause","Afspil animationen"]},
-  en:{s:["Waiting for mail","New email received","Reading email and invoice","Finding the details","Creating a draft","Waiting for approval","Approved by an employee"],tog:["Pause the animation","Play the animation"]}
+  da:{steps:["En faktura lander i Outlook","AI-agenten læser fakturaen","Den finder leverandør, beløb og fakturadato","Den sender oplysningerne til økonomisystemet","En medarbejder godkender"],
+      wait:"Venter på post",done:"Godkendt af en medarbejder",count:"Trin {n} af 5",
+      p1:["Ingen ny post","Ny mail","Læst"],p2:["Venter","Læser","3 oplysninger fundet"],p3:["Venter","Udkast oprettet","Afventer godkendelse","Godkendt"],
+      tog:["Sæt animationen på pause","Afspil animationen"]},
+  en:{steps:["An invoice arrives in Outlook","The AI agent reads the invoice","It finds the supplier, amount and invoice date","It sends the details to the accounting system","An employee approves"],
+      wait:"Waiting for mail",done:"Approved by an employee",count:"Step {n} of 5",
+      p1:["No new mail","New email","Read"],p2:["Waiting","Reading","3 details found"],p3:["Waiting","Draft created","Awaiting approval","Approved"],
+      tog:["Pause the animation","Play the animation"]}
 };
-const stage=document.getElementById('stage'), stageStatus=document.getElementById('stage-status'), stageOk=document.getElementById('stage-ok'), stageTog=document.getElementById('stage-toggle');
-const stageLis=[...document.querySelectorAll('#stage-steps li')], stageParts=[...stage.querySelectorAll('[data-from]')];
-const STAGE_DUR=[900,1500,2000,1900,1800,1900,3400];
+const stage=document.getElementById('stage'), stageStatus=document.getElementById('stage-status'), stageCount=document.getElementById('stage-count'), stageOk=document.getElementById('stage-ok'), stageTog=document.getElementById('stage-toggle');
+const stageRail=[...document.querySelectorAll('#stage-rail li')], stageParts=[...stage.querySelectorAll('[data-from]')], stageStn=[...stage.querySelectorAll('.stn')], stageLinks=[...stage.querySelectorAll('.link')];
+const stagePills=[1,2,3].map(n=>document.getElementById('pill-'+n));
+const STAGE_DUR=[1000,1700,2100,2300,2000,2000,3600];
 let sg=6, sgTimer=null, sgPress=null, sgPaused=false, sgVisible=true;
 function stagePaint(){
+  const T=STAGE_TX[LANG];
   stage.classList.toggle('scanning',sg===2);
   stage.classList.toggle('done',sg===6);
-  stageParts.forEach(el=>el.classList.toggle('on',sg>=+el.dataset.from));
-  stageLis.forEach((li,i)=>{const n=i+1; li.classList.toggle('done',n<sg); li.classList.toggle('now',n===sg);});
+  stageParts.forEach(e=>e.classList.toggle('on',sg>=+e.dataset.from));
+  stageRail.forEach((li,i)=>{const n=i+1; li.classList.toggle('done',n<sg); li.classList.toggle('now',n===sg);});
+  const idleAt=[1,2,4], actAt=[[1],[2,3],[4,5]];
+  stageStn.forEach((s,i)=>{ s.classList.toggle('idle',sg<idleAt[i]); s.classList.toggle('act',actAt[i].includes(sg)); });
+  stageLinks[0].classList.toggle('on',sg>=2); stageLinks[1].classList.toggle('on',sg>=4);
   stageOk.classList.toggle('yes',sg>=6); stageOk.classList.remove('press');
-  stageStatus.textContent=STAGE_TX[LANG].s[sg];
-  stageTog.setAttribute('aria-label',STAGE_TX[LANG].tog[sgPaused?1:0]);
+  stageStatus.textContent = sg===0 ? T.wait : sg===6 ? T.done : T.steps[sg-1];
+  stageCount.textContent = sg===0 ? '' : T.count.replace('{n}',Math.min(sg,5));
+  stagePills[0].textContent=T.p1[sg>=2?2:sg===1?1:0];
+  stagePills[1].textContent=T.p2[sg>=3?2:sg===2?1:0];
+  stagePills[2].textContent=T.p3[sg>=6?3:sg===5?2:sg===4?1:0];
+  stageTog.setAttribute('aria-label',T.tog[sgPaused?1:0]);
 }
 function stageSchedule(){
   clearTimeout(sgTimer); clearTimeout(sgPress);
   if(sgPaused||!sgVisible) return;
-  if(sg===5) sgPress=setTimeout(()=>stageOk.classList.add('press'),STAGE_DUR[5]-420);
+  if(sg===5) sgPress=setTimeout(()=>stageOk.classList.add('press'),STAGE_DUR[5]-460);
   sgTimer=setTimeout(()=>{sg=(sg+1)%7; stagePaint(); stageSchedule();},STAGE_DUR[sg]);
 }
 if(!REDUCE){
@@ -1072,130 +1408,330 @@ if(!REDUCE){
   stageTog.addEventListener('click',()=>{sgPaused=!sgPaused; stage.classList.toggle('paused',sgPaused); stagePaint(); stageSchedule();});
 }
 
-// ── Interaktiv demonstration. Opdigtede data, ingen forbindelse til et rigtigt system. ──
+// ── Use cases: tre arbejdsgange, trin for trin. Opdigtede eksempeldata. ──
+// by: 'in' = det, der kommer ind · 'ai' = AI-agenten · 'sys' = jeres system · 'hum' = et menneske
+const UC={
+da:{by:{in:"Kommer ind",ai:"AI-agenten",sys:"Jeres system",hum:"Menneske"},list:[
+ [{by:'in',k:"En kunde skriver",rows:["Mail fra en kunde","“Hvornår kommer min ordre?”"],d:"Mailen lander i den indbakke, I allerede bruger til kunder."},
+  {by:'ai',k:"AI-agenten læser den",rows:[["Handler om","Levering"],["Haster","Nej"]],d:"Agenten finder ud af, hvad kunden spørger om, og hvor meget det haster."},
+  {by:'ai',k:"Den finder oplysningerne",rows:[["Kunde","Eksempel A/S"],["Ordre","nr. 1087"]],d:"Agenten finder de oplysninger i mailen, der skal til for at svare."},
+  {by:'sys',k:"Indbakken bliver sorteret",rows:["Lagt under Levering","Svarudkast skrevet"],d:"Agenten lægger mailen i den rigtige mappe og et udkast til svar i jeres mailprogram."},
+  {by:'hum',k:"En medarbejder sender",rows:["Læser svaret","Retter og sender"],d:"Medarbejderen læser udkastet, retter i det, hvis der er brug for det, og sender det selv."}],
+ [{by:'in',k:"En faktura kommer ind",rows:["Mail fra Eksempel A/S","faktura-2041.pdf"],d:"Fakturaen lander i jeres indbakke, som den plejer. I skal ikke sende den et nyt sted hen."},
+  {by:'ai',k:"AI-agenten læser den",rows:[["Dokument","Faktura"],["Fil","PDF"]],d:"Agenten åbner den vedhæftede fil og finder ud af, hvad det er for et dokument."},
+  {by:'ai',k:"Den finder oplysningerne",rows:[["Leverandør","Eksempel A/S"],["Beløb","4.250,00 kr."],["Fakturadato","12.11.2026"]],d:"Agenten finder de oplysninger, bogføringen skal bruge, og lægger dem i faste felter."},
+  {by:'sys',k:"Økonomisystemet får et udkast",rows:["Udkast oprettet","Intet er bogført endnu"],d:"Agenten lægger oplysningerne ind som et udkast i det økonomisystem, I allerede bruger."},
+  {by:'hum',k:"En medarbejder godkender",rows:["Ser udkastet igennem","Trykker godkend"],d:"Først når en medarbejder har godkendt, bliver fakturaen bogført."}],
+ [{by:'in',k:"I siger, hvem I leder efter",rows:[["Branche","Håndværk"],["Størrelse","10–50 ansatte"],["Område","Fyn"]],d:"I bestemmer, hvilke virksomheder agenten skal lede efter, og I kan ændre det når som helst."},
+  {by:'ai',k:"AI-agenten søger",rows:["Offentlige registre","Virksomhedernes hjemmesider"],d:"Agenten finder virksomheder, der passer til det, I leder efter, og læser offentligt tilgængelige oplysninger om dem."},
+  {by:'ai',k:"Den samler oplysningerne",rows:[["Virksomhed","Eksempel A/S"],["Passer","Ja"],["Hvorfor","Rigtig branche og størrelse"]],d:"Hver virksomhed får en kort begrundelse, så I kan se, hvorfor den er med."},
+  {by:'sys',k:"Listen lander i jeres CRM",rows:["Nye emner oprettet","Med begrundelse"],d:"Agenten lægger de virksomheder, der passer, ind i det CRM, I allerede bruger."},
+  {by:'hum',k:"Et menneske ringer",rows:["Læser listen","Tager kontakten"],d:"Agenten kontakter ingen. Det er et menneske, der ringer."}]
+]},
+en:{by:{in:"Comes in",ai:"The AI agent",sys:"Your system",hum:"Person"},list:[
+ [{by:'in',k:"A customer writes",rows:["Email from a customer","“When will my order arrive?”"],d:"The email lands in the inbox you already use for customers."},
+  {by:'ai',k:"The AI agent reads it",rows:[["About","Delivery"],["Urgent","No"]],d:"The agent works out what the customer is asking and how urgent it is."},
+  {by:'ai',k:"The details are found",rows:[["Customer","Example Ltd"],["Order","no. 1087"]],d:"The details needed to answer are found in the email."},
+  {by:'sys',k:"The inbox is sorted",rows:["Filed under Delivery","Draft reply written"],d:"The email is sorted, and a draft reply is ready in your mail program."},
+  {by:'hum',k:"An employee sends",rows:["Reads the reply","Edits and sends"],d:"The employee reads the draft, edits it if needed, and sends it themselves."}],
+ [{by:'in',k:"An invoice comes in",rows:["Email from Example Ltd","invoice-2041.pdf"],d:"The invoice lands in your inbox as usual. You do not have to send it anywhere new."},
+  {by:'ai',k:"The AI agent reads it",rows:[["Document","Invoice"],["File","PDF"]],d:"The agent opens the attached file and works out what kind of document it is."},
+  {by:'ai',k:"The details are found",rows:[["Supplier","Example Ltd"],["Amount","DKK 4,250.00"],["Invoice date","12 Nov 2026"]],d:"The details the bookkeeping needs are found and placed in fixed fields."},
+  {by:'sys',k:"The accounting system gets a draft",rows:["Draft created","Nothing posted yet"],d:"The details are entered as a draft in the accounting system you already use."},
+  {by:'hum',k:"An employee approves",rows:["Looks the draft over","Presses approve"],d:"Only when an employee has approved is the invoice posted."}],
+ [{by:'in',k:"You say who you are looking for",rows:[["Industry","Trades"],["Size","10–50 employees"],["Area","Funen"]],d:"You decide which companies the agent should look for. It can be changed at any time."},
+  {by:'ai',k:"The AI agent searches",rows:["Public registers","Company websites"],d:"The agent finds companies that match and reads publicly available information about them."},
+  {by:'ai',k:"The details are gathered",rows:[["Company","Example Ltd"],["Fits","Yes"],["Why","Right industry and size"]],d:"Each company gets a short explanation, so you can see why it is on the list."},
+  {by:'sys',k:"The list goes into your CRM",rows:["New leads created","With an explanation"],d:"The companies that fit are entered in the CRM you already use."},
+  {by:'hum',k:"A person makes the call",rows:["Reads the list","Makes contact"],d:"The agent contacts nobody. It is a person who makes the call."}]
+]}
+};
+const ucTabs=[...document.querySelectorAll('#uc-tabs .uc-tab')], ucPanel=document.getElementById('uc-panel'), ucFlow=document.getElementById('uc-flow'), ucDetail=document.getElementById('uc-detail');
+const UC_ICON={in:'i-mail',ai:'i-agent',sys:'i-ledger',hum:'i-person'};
+let ucT=0, ucN=0;
+function ucPick(i){
+  ucN=i; const nodes=UC[LANG].list[ucT];
+  [...ucFlow.querySelectorAll('.uc-btn')].forEach((b,k)=>b.setAttribute('aria-pressed',String(k===i)));
+  ucDetail.textContent=nodes[i].d;
+}
+function ucRender(play){
+  const U=UC[LANG], nodes=U.list[ucT];
+  ucFlow.textContent='';
+  nodes.forEach((nd,i)=>{
+    const li=el('li','uc-node'), b=el('button','uc-btn'); b.type='button';
+    const top=el('span','top'); top.append(el('span','n',String(i+1)));
+    const by=el('span','by'+(nd.by==='ai'?' ai':'')); by.append(icon(UC_ICON[nd.by],13), el('span','',U.by[nd.by])); top.append(by);
+    const rows=el('span','uc-rows');
+    nd.rows.forEach(r=>{ if(Array.isArray(r)){ const kv=el('span','kv'); kv.append(el('span','',r[0]),el('b','',r[1])); rows.append(kv);} else rows.append(el('span','ln',r)); });
+    b.append(top, el('span','k',nd.k), rows);
+    b.addEventListener('click',()=>ucPick(i));
+    li.append(b); ucFlow.append(li);
+  });
+  ucFlow.classList.remove('play');
+  if(play && !REDUCE){ void ucFlow.offsetWidth; ucFlow.classList.add('play'); }
+  ucPick(Math.min(ucN,nodes.length-1));
+}
+function ucTask(i,focus){
+  ucT=i; ucN=0;
+  ucTabs.forEach((t,k)=>{ t.setAttribute('aria-selected',String(k===i)); t.tabIndex=k===i?0:-1; });
+  ucPanel.setAttribute('aria-labelledby','uc-tab-'+i);
+  ucRender(true);
+  if(focus) ucTabs[i].focus();
+}
+function tabKeys(tabs,go){
+  tabs.forEach((t,i)=>t.addEventListener('keydown',e=>{
+    let n=null;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') n=(i+1)%tabs.length;
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp') n=(i+tabs.length-1)%tabs.length;
+    else if(e.key==='Home') n=0; else if(e.key==='End') n=tabs.length-1;
+    if(n!==null){ e.preventDefault(); go(n,true); }
+  }));
+}
+ucTabs.forEach((t,i)=>t.addEventListener('click',()=>ucTask(i)));
+tabKeys(ucTabs,ucTask);
+ucRender(false);
+
+// ── Demonstration: AI-medarbejderen udfører opgaven. Simulation med opdigtede data. ──
 const DEMO={
-da:{ui:{step:"Trin",of:"af",next:"Næste trin",restart:"Start forfra",working:"Arbejder…",wait:"Venter på en medarbejder",done:"Færdig"},
+da:{ui:{start:"Start AI-medarbejderen",working:"Arbejder…",again:"Kør igen",ready:"Klar til at gå i gang",busy:"Arbejder",wait:"Venter på jer",done:"Færdig",back:"Sendt tilbage",
+        sysl:"Arbejder i:",sysw:"Venter på:",sysn:"Ikke startet",human:"en medarbejder",
+        idleLog:"Loggen er tom. Tryk start, så kan I følge med i, hvad AI-medarbejderen gør.",idleFoot:"Tryk start for at se opgaven blive løst.",runFoot:"AI-medarbejderen arbejder. Den spørger jer, før noget bliver gennemført.",
+        st:{todo:"",run:"Arbejder",ok:"Færdig",ask:"Venter på jer",yes:"Godkendt",no:"Sendt tilbage"},from:"Fra",empty:"–"},
  tasks:[
-  {steps:[
-    {lb:"Læser",t:"AI-agenten læser mailen og fakturaen",d:"Den åbner mailen og den vedhæftede faktura, ligesom en medarbejder ville gøre.",st:"E-mail og faktura læst",rows:[["E-mail","Faktura for november"],["Vedhæftet","faktura-2041.pdf"]]},
-    {lb:"Finder",t:"Den finder oplysningerne",d:"Agenten finder de oplysninger, der skal bruges i bogføringen.",st:"Oplysningerne er fundet",rows:[["Leverandør","Eksempel A/S"],["Beløb","4.250,00 kr."],["Dato","12.11.2026"]]},
-    {lb:"Opretter udkast",t:"Den opretter et udkast",d:"Fakturaen bliver lagt ind som udkast i økonomisystemet. Intet er bogført endnu.",st:"Udkast oprettet",rows:[["Økonomisystem","Udkast oprettet"]]},
-    {lb:"I godkender",t:"En medarbejder godkender",d:"Medarbejderen ser udkastet igennem. Først når der er trykket godkend, bliver fakturaen bogført.",rows:[]}],
-   res:{t:"Udkastet er klar til godkendelse",btn:"Godkend",fin:"Godkendt af en medarbejder. Fakturaen er bogført."}},
-  {steps:[
-    {lb:"Læser",t:"AI-agenten læser henvendelsen",d:"En kunde har skrevet til jer. Agenten læser beskeden med det samme.",st:"Henvendelsen er læst",rows:[["Fra","En kunde"],["Besked","Hvornår kommer min ordre?"]]},
-    {lb:"Forstår",t:"Den finder ud af, hvad det handler om",d:"Agenten sorterer henvendelsen, så den lander det rigtige sted.",st:"Henvendelsen er sorteret",rows:[["Type","Spørgsmål om levering"]]},
-    {lb:"Skriver udkast",t:"Den skriver et udkast til svar",d:"Svaret bygger på jeres egne oplysninger og jeres måde at skrive på.",st:"Udkast til svar skrevet",rows:[["Slår op","Ordrens status i jeres system"],["Udkast","Svar skrevet og lagt klar"]]},
-    {lb:"I sender",t:"En medarbejder sender svaret",d:"Medarbejderen læser svaret, retter i det, hvis der er brug for det, og trykker send.",rows:[]}],
-   res:{t:"Svaret er klar til at blive sendt",btn:"Send svaret",fin:"Sendt af en medarbejder."}},
-  {steps:[
-    {lb:"Finder",t:"AI-agenten finder virksomheder",d:"Den leder efter virksomheder, der ligner dem, I gerne vil have som kunder.",st:"Virksomheder fundet",rows:[["I leder efter","Branche, størrelse og område"],["Fundet","En liste over virksomheder"]]},
-    {lb:"Undersøger",t:"Den undersøger hver enkelt",d:"Agenten læser offentligt tilgængelige oplysninger, for eksempel virksomhedens hjemmeside.",st:"Virksomhederne er undersøgt",rows:[["Kilder","Hjemmesider og offentlige registre"]]},
-    {lb:"Udvælger",t:"Den udvælger dem, der passer",d:"Hver virksomhed får en kort begrundelse, så I kan se, hvorfor den er med.",st:"Listen er sorteret",rows:[["Passer","Lagt øverst på listen"],["Passer ikke","Sorteret fra, med en begrundelse"]]},
-    {lb:"I ringer",t:"Et menneske tager kontakten",d:"I får en kort liste med de virksomheder, der passer bedst. Det er et menneske, der ringer.",rows:[]}],
-   res:{t:"Listen er klar til gennemgang",btn:"Markér som gennemgået",fin:"Gennemgået. Nu ringer et menneske."}}
+  {where:"Outlook",inc:{from:"Eksempel A/S",subj:"Faktura for november",att:"faktura-2041.pdf"},
+   steps:[
+    {lb:"Læser mailen og fakturaen",sys:"Outlook",log:["Åbnede mailen “Faktura for november”","Åbnede faktura-2041.pdf"]},
+    {lb:"Finder oplysningerne",sys:"Fakturaen",log:[["Fandt leverandøren",["Leverandør","Eksempel A/S"]],["Fandt beløbet",["Beløb","4.250,00 kr."]],["Fandt fakturadatoen",["Fakturadato","12.11.2026"]]]},
+    {lb:"Opretter et udkast",sys:"Økonomisystemet",log:[["Oprettede et udkast til bogføring",["Status","Udkast, ikke bogført"]]]},
+    {lb:"En medarbejder godkender"}],
+   res:{ask:"Udkastet er klar. Vil I godkende det?",yes:"Godkend",no:"Send tilbage",yesT:"Godkendt. Fakturaen er bogført.",noT:"Sendt tilbage. Intet er bogført.",yesL:"En medarbejder godkendte udkastet",noL:"En medarbejder sendte udkastet tilbage",yesD:["Status","Bogført"],noD:["Status","Sendt tilbage, ikke bogført"]}},
+  {where:"Outlook",inc:{from:"En kunde",subj:"Hvornår kommer min ordre?",body:"Hej. Jeg bestilte i sidste uge og har ikke hørt noget. Ordre nr. 1087."},
+   steps:[
+    {lb:"Læser henvendelsen",sys:"Outlook",log:["Åbnede mailen fra kunden"]},
+    {lb:"Forstår, hvad den handler om",sys:"Mailen",log:[["Fandt ud af, hvad kunden spørger om",["Handler om","Levering"]],["Fandt ordrenummeret",["Ordre","nr. 1087"]]]},
+    {lb:"Skriver et svarudkast",sys:"Ordresystemet og Outlook",log:[["Slog ordren op",["Ordrestatus","Afsendt"]],["Skrev et svarudkast",["Svar","Udkast klar i Outlook"]]]},
+    {lb:"En medarbejder sender"}],
+   res:{ask:"Svaret er klar. Vil I sende det?",yes:"Send svaret",no:"Ret selv",yesT:"Sendt af en medarbejder.",noT:"Udkastet ligger klar, så medarbejderen selv kan rette det. Intet er sendt.",yesL:"En medarbejder sendte svaret",noL:"En medarbejder valgte selv at rette svaret",yesD:["Svar","Sendt af en medarbejder"],noD:["Svar","Udkast, ikke sendt"]}},
+  {where:"Jeres kriterier",inc:{rows:[["Branche","Håndværk"],["Størrelse","10–50 ansatte"],["Område","Fyn"]]},
+   steps:[
+    {lb:"Finder virksomheder",sys:"Offentlige registre",log:[["Fandt virksomheder, der passer",["Fundet","En liste over virksomheder"]]]},
+    {lb:"Undersøger hver enkelt",sys:"Virksomhedernes hjemmesider",log:["Læste virksomhedernes hjemmesider",["Noterede, hvad de laver",["Undersøgt","Branche og størrelse"]]]},
+    {lb:"Udvælger dem, der passer",sys:"Jeres CRM",log:[["Sorterede listen",["Passer","Lagt øverst, med begrundelse"]],["Lagde listen klar",["Liste","Klar i jeres CRM"]]]},
+    {lb:"Et menneske ringer"}],
+   res:{ask:"Listen er klar. Vil I gå videre med den?",yes:"Godkend listen",no:"Send tilbage",yesT:"Godkendt. Nu ringer et menneske.",noT:"Sendt tilbage. Ingen bliver kontaktet.",yesL:"En medarbejder godkendte listen",noL:"En medarbejder sendte listen tilbage",yesD:["Liste","Godkendt"],noD:["Liste","Sendt tilbage"]}}
  ]},
-en:{ui:{step:"Step",of:"of",next:"Next step",restart:"Start over",working:"Working…",wait:"Waiting for an employee",done:"Done"},
+en:{ui:{start:"Start the AI employee",working:"Working…",again:"Run again",ready:"Ready to begin",busy:"Working",wait:"Waiting for you",done:"Done",back:"Sent back",
+        sysl:"Working in:",sysw:"Waiting for:",sysn:"Not started",human:"an employee",
+        idleLog:"The log is empty. Press start to follow what the AI employee does.",idleFoot:"Press start to see the task being solved.",runFoot:"The AI employee is working. It asks you before anything is carried out.",
+        st:{todo:"",run:"Working",ok:"Done",ask:"Waiting for you",yes:"Approved",no:"Sent back"},from:"From",empty:"–"},
  tasks:[
-  {steps:[
-    {lb:"Reads",t:"The AI agent reads the email and the invoice",d:"It opens the email and the attached invoice, just as an employee would.",st:"Email and invoice read",rows:[["Email","Invoice for November"],["Attached","invoice-2041.pdf"]]},
-    {lb:"Finds",t:"It finds the details",d:"The agent finds the details needed for the bookkeeping.",st:"Details found",rows:[["Supplier","Example Ltd"],["Amount","DKK 4,250.00"],["Date","12 Nov 2026"]]},
-    {lb:"Creates a draft",t:"It creates a draft",d:"The invoice is entered as a draft in the accounting system. Nothing has been posted yet.",st:"Draft created",rows:[["Accounting system","Draft created"]]},
-    {lb:"You approve",t:"An employee approves",d:"The employee looks the draft over. Only when approve has been pressed is the invoice posted.",rows:[]}],
-   res:{t:"The draft is ready for approval",btn:"Approve",fin:"Approved by an employee. The invoice is posted."}},
-  {steps:[
-    {lb:"Reads",t:"The AI agent reads the enquiry",d:"A customer has written to you. The agent reads the message straight away.",st:"Enquiry read",rows:[["From","A customer"],["Message","When will my order arrive?"]]},
-    {lb:"Understands",t:"It works out what it is about",d:"The agent sorts the enquiry so it lands in the right place.",st:"Enquiry sorted",rows:[["Type","Question about delivery"]]},
-    {lb:"Writes a draft",t:"It writes a draft reply",d:"The reply is based on your own information and your way of writing.",st:"Draft reply written",rows:[["Looks up","The order status in your system"],["Draft","Reply written and ready"]]},
-    {lb:"You send",t:"An employee sends the reply",d:"The employee reads the reply, edits it if needed, and presses send.",rows:[]}],
-   res:{t:"The reply is ready to be sent",btn:"Send the reply",fin:"Sent by an employee."}},
-  {steps:[
-    {lb:"Finds",t:"The AI agent finds companies",d:"It looks for companies that resemble the ones you would like as customers.",st:"Companies found",rows:[["You are looking for","Industry, size and area"],["Found","A list of companies"]]},
-    {lb:"Researches",t:"It researches each one",d:"The agent reads publicly available information, for example the company's website.",st:"Companies researched",rows:[["Sources","Websites and public registers"]]},
-    {lb:"Selects",t:"It picks out the ones that fit",d:"Each company gets a short explanation, so you can see why it is on the list.",st:"List sorted",rows:[["Fits","Placed at the top of the list"],["Does not fit","Sorted out, with an explanation"]]},
-    {lb:"You call",t:"A person makes contact",d:"You get a short list of the companies that fit best. It is a person who makes the call.",rows:[]}],
-   res:{t:"The list is ready for review",btn:"Mark as reviewed",fin:"Reviewed. Now a person makes the call."}}
+  {where:"Outlook",inc:{from:"Example Ltd",subj:"Invoice for November",att:"invoice-2041.pdf"},
+   steps:[
+    {lb:"Reads the email and the invoice",sys:"Outlook",log:["Opened the email “Invoice for November”","Opened invoice-2041.pdf"]},
+    {lb:"Finds the details",sys:"The invoice",log:[["Found the supplier",["Supplier","Example Ltd"]],["Found the amount",["Amount","DKK 4,250.00"]],["Found the invoice date",["Invoice date","12 Nov 2026"]]]},
+    {lb:"Creates a draft",sys:"The accounting system",log:[["Created a draft for posting",["Status","Draft, not posted"]]]},
+    {lb:"An employee approves"}],
+   res:{ask:"The draft is ready. Do you want to approve it?",yes:"Approve",no:"Send back",yesT:"Approved. The invoice is posted.",noT:"Sent back. Nothing is posted.",yesL:"An employee approved the draft",noL:"An employee sent the draft back",yesD:["Status","Posted"],noD:["Status","Sent back, not posted"]}},
+  {where:"Outlook",inc:{from:"A customer",subj:"When will my order arrive?",body:"Hi. I ordered last week and have not heard anything. Order no. 1087."},
+   steps:[
+    {lb:"Reads the enquiry",sys:"Outlook",log:["Opened the email from the customer"]},
+    {lb:"Understands what it is about",sys:"The email",log:[["Worked out what the customer is asking",["About","Delivery"]],["Found the order number",["Order","no. 1087"]]]},
+    {lb:"Writes a draft reply",sys:"The order system and Outlook",log:[["Looked up the order",["Order status","Shipped"]],["Wrote a draft reply",["Reply","Draft ready in Outlook"]]]},
+    {lb:"An employee sends"}],
+   res:{ask:"The reply is ready. Do you want to send it?",yes:"Send the reply",no:"Edit it myself",yesT:"Sent by an employee.",noT:"The draft is ready for the employee to edit. Nothing has been sent.",yesL:"An employee sent the reply",noL:"An employee chose to edit the reply",yesD:["Reply","Sent by an employee"],noD:["Reply","Draft, not sent"]}},
+  {where:"Your criteria",inc:{rows:[["Industry","Trades"],["Size","10–50 employees"],["Area","Funen"]]},
+   steps:[
+    {lb:"Finds companies",sys:"Public registers",log:[["Found companies that match",["Found","A list of companies"]]]},
+    {lb:"Researches each one",sys:"The companies' websites",log:["Read the companies' websites",["Noted what they do",["Researched","Industry and size"]]]},
+    {lb:"Picks out the ones that fit",sys:"Your CRM",log:[["Sorted the list",["Fits","Placed at the top, with an explanation"]],["Made the list ready",["List","Ready in your CRM"]]]},
+    {lb:"A person makes the call"}],
+   res:{ask:"The list is ready. Do you want to go ahead with it?",yes:"Approve the list",no:"Send back",yesT:"Approved. Now a person makes the call.",noT:"Sent back. Nobody is contacted.",yesL:"An employee approved the list",noL:"An employee sent the list back",yesD:["List","Approved"],noD:["List","Sent back"]}}
  ]}
 };
-const dTabs=[...document.querySelectorAll('#demo-tabs .tab')], dPanel=document.getElementById('demo-panel'), dStepsEl=document.getElementById('demo-steps'), dScreen=document.getElementById('demo-screen');
-const dStatus=document.getElementById('demo-status'), dCount=document.getElementById('demo-count'), dBar=document.getElementById('demo-bar'), dTitle=document.getElementById('demo-title'), dText=document.getElementById('demo-text'), dRows=document.getElementById('demo-rows'), dResult=document.getElementById('demo-result'), dPrev=document.getElementById('demo-prev'), dNext=document.getElementById('demo-next'), dNextL=document.getElementById('demo-next-l');
-let dT=0, dS=0, dFin=false, dBusy=null;
-function el(tag,cls,txt){const e=document.createElement(tag); if(cls) e.className=cls; if(txt!==undefined) e.textContent=txt; return e;}
-function demoBuildSteps(){
-  dStepsEl.textContent='';
-  DEMO[LANG].tasks[dT].steps.forEach((s,i)=>{
-    const li=el('li'), b=el('button','dm-step'); b.type='button';
-    b.append(el('span','n',String(i+1)), el('span','lb',s.lb));
-    b.setAttribute('aria-label',DEMO[LANG].ui.step+' '+(i+1)+': '+s.lb);
-    b.addEventListener('click',()=>demoGo(i));
-    li.append(b); dStepsEl.append(li);
-  });
+const dTabs=[...document.querySelectorAll('#demo-tabs .tab')], dPanel=document.getElementById('demo-panel'), dScreen=document.getElementById('demo-screen');
+const dIn=document.getElementById('demo-in'), dWhere=document.getElementById('demo-where'), dStart=document.getElementById('demo-start'), dStepsEl=document.getElementById('demo-steps');
+const dStatus=document.getElementById('demo-status'), dSysL=document.getElementById('demo-sysl'), dSys=document.getElementById('demo-sys'), dLog=document.getElementById('demo-log'), dData=document.getElementById('demo-data'), dFoot=document.getElementById('demo-foot');
+let dT=0, dState='idle', dTimers=[];
+const dWait=(fn,ms)=>dTimers.push(setTimeout(fn,ms));
+function demoStep(i,state){
+  const li=dStepsEl.children[i]; if(!li) return;
+  li.className = state==='run'?'is-run' : (state==='ok'||state==='yes')?'is-ok' : (state==='ask'||state==='no')?'is-ask' : '';
+  li.querySelector('.st').textContent=DEMO[LANG].ui.st[state]||'';
 }
-function demoHead(){
-  const ui=DEMO[LANG].ui, st=DEMO[LANG].tasks[dT].steps[dS];
-  dTitle.textContent=st.t; dText.textContent=st.d;
-  dCount.textContent=ui.step+' '+(dS+1)+' '+ui.of+' 4';
-  dBar.style.transform='scaleX('+((dS+1)/4)+')';
-  [...dStepsEl.querySelectorAll('.dm-step')].forEach((b,i)=>{ b.classList.toggle('past',i<dS); if(i===dS) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); });
-  dPrev.disabled=dS===0;
-  dNextL.textContent=dS<3?ui.next:ui.restart;
+function demoSys(label,name){ dSysL.textContent=label; dSys.textContent=name; }
+function demoFoot(cls,nodes){ dFoot.className='screen-foot'+(cls?' '+cls:''); dFoot.textContent=''; nodes.forEach(n=>dFoot.append(n)); }
+function demoLog(text,cls){
+  const e=dLog.querySelector('.empty'); if(e) e.remove();
+  const li=el('li',cls||''); if(cls!=='sys') li.append(icon(cls==='hum'?'i-person':'i-check',14)); li.append(el('span','',text)); dLog.append(li);
 }
-function demoRows(fresh){
-  const ui=DEMO[LANG].ui, task=DEMO[LANG].tasks[dT];
-  dRows.textContent='';
-  for(let i=0;i<=dS;i++) task.steps[i].rows.forEach(r=>{ const d=el('div',(i===dS&&fresh)?'new':''); d.append(el('dt','',r[0]),el('dd','',r[1])); dRows.append(d); });
-  dResult.textContent='';
-  if(dS===3){
-    const box=el('div','result'+(dFin?' fin':''));
-    box.append(el('span','',dFin?task.res.fin:task.res.t));
-    if(!dFin){ const b=el('button','btn btn-primary',task.res.btn); b.type='button'; b.addEventListener('click',()=>{dFin=true; demoRows(false); const f=dResult.querySelector('.result'); if(f){f.tabIndex=-1; f.focus({preventScroll:true});}}); box.append(b); }
-    dResult.append(box);
+function demoData(pair){
+  const row=[...dData.children].find(d=>d.dataset.k===pair[0]); if(!row) return;
+  row.className='new'; row.querySelector('dd').textContent=pair[1];
+  dWait(()=>{row.className='';},1400);
+}
+function demoReset(){
+  dTimers.forEach(clearTimeout); dTimers=[]; dState='idle';
+  const D=DEMO[LANG], ui=D.ui, task=D.tasks[dT];
+  dScreen.classList.remove('busy');
+  dWhere.textContent=task.where;
+  dIn.textContent='';
+  if(task.inc.rows){ task.inc.rows.forEach(r=>{const kv=el('div','kv'); kv.append(el('span','',r[0]),el('b','',r[1])); dIn.append(kv);}); }
+  else{
+    const fr=el('div','fr'); fr.append(el('span','',ui.from+': '+task.inc.from)); if(task.inc.att) fr.append(el('span','tag',task.inc.att));
+    dIn.append(fr, el('b','',task.inc.subj)); if(task.inc.body) dIn.append(el('span','',task.inc.body));
   }
-  dStatus.textContent = dS===3 ? (dFin?ui.done:ui.wait) : task.steps[dS].st;
+  dStepsEl.textContent='';
+  task.steps.forEach((s,i)=>{ const li=el('li'), n=el('span','n'); n.append(el('span','',String(i+1)),icon('i-check',14)); li.append(n,el('span','',s.lb),el('span','st','')); dStepsEl.append(li); });
+  dLog.textContent=''; dLog.append(el('li','empty',ui.idleLog));
+  dData.textContent='';
+  task.steps.forEach(s=>(s.log||[]).forEach(l=>{ if(Array.isArray(l)){ const d=el('div','pend'); d.dataset.k=l[1][0]; d.append(el('dt','',l[1][0]),el('dd','',ui.empty)); dData.append(d);} }));
+  dStatus.textContent=ui.ready; demoSys('',ui.sysn);
+  demoFoot('',[el('span','hint',ui.idleFoot)]);
+  dStart.disabled=false; dStart.textContent=ui.start;
 }
-function demoGo(i,instant){
-  if(i<0||i>3) return;
-  dS=i; dFin=false; clearTimeout(dBusy); demoHead();
-  if(REDUCE||instant||dS===3){ dScreen.classList.remove('busy'); demoRows(!instant); return; }
-  // lille "arbejder"-pause, før agentens resultat vises
-  dScreen.classList.add('busy'); dStatus.textContent=DEMO[LANG].ui.working;
-  const task=DEMO[LANG].tasks[dT]; dRows.textContent=''; dResult.textContent='';
-  for(let k=0;k<dS;k++) task.steps[k].rows.forEach(r=>{ const d=el('div'); d.append(el('dt','',r[0]),el('dd','',r[1])); dRows.append(d); });
-  task.steps[dS].rows.forEach(()=>dRows.append(el('div','shim')));
-  dBusy=setTimeout(()=>{ dScreen.classList.remove('busy'); demoRows(true); },560);
+function demoAsk(){
+  const D=DEMO[LANG], ui=D.ui, task=D.tasks[dT];
+  dState='ask'; dScreen.classList.remove('busy');
+  demoStep(3,'ask'); dStatus.textContent=ui.wait; demoSys(ui.sysw,ui.human);
+  const acts=el('div','acts'), y=el('button','btn btn-primary',task.res.yes), n=el('button','btn btn-ghost',task.res.no);
+  y.type='button'; n.type='button';
+  y.addEventListener('click',()=>demoDecide(true)); n.addEventListener('click',()=>demoDecide(false));
+  acts.append(y,n);
+  demoFoot('ask',[el('span','q',task.res.ask),acts]);
+  // er godkendelsen uden for skærmen, mens demoen er i syne, så rul den ind
+  const sr=dScreen.getBoundingClientRect(), fr=dFoot.getBoundingClientRect();
+  if(sr.bottom>0 && sr.top<window.innerHeight && fr.bottom>window.innerHeight) dFoot.scrollIntoView({behavior:REDUCE?'auto':'smooth',block:'end'});
+}
+function demoDecide(yes){
+  const D=DEMO[LANG], ui=D.ui, task=D.tasks[dT];
+  dState='done';
+  demoStep(3,yes?'yes':'no'); demoLog(yes?task.res.yesL:task.res.noL,'hum'); demoData(yes?task.res.yesD:task.res.noD);
+  dStatus.textContent=yes?ui.done:ui.back; demoSys('',yes?ui.done:ui.back);
+  const out=el('span','q',yes?task.res.yesT:task.res.noT); out.tabIndex=-1;
+  demoFoot('',[out]); out.focus({preventScroll:true});
+  dStart.disabled=false; dStart.textContent=ui.again;
+}
+function demoStart(){
+  if(dState==='run'||dState==='ask') return;
+  demoReset();
+  const D=DEMO[LANG], ui=D.ui, task=D.tasks[dT];
+  dState='run'; dScreen.classList.add('busy');
+  dStart.disabled=true; dStart.textContent=ui.working;
+  dLog.textContent='';
+  demoFoot('',[el('span','hint',ui.runFoot)]);
+  // på smalle skærme ligger skærmbilledet under startknappen: rul det ind, så man kan følge med
+  if(window.matchMedia('(max-width:900px)').matches) dScreen.scrollIntoView({behavior:REDUCE?'auto':'smooth',block:'start'});
+  const gap=REDUCE?260:760; let t=120;
+  task.steps.slice(0,3).forEach((s,i)=>{
+    dWait(()=>{ demoStep(i,'run'); dStatus.textContent=s.lb; demoSys(ui.sysl,s.sys); demoLog(ui.sysl+' '+s.sys,'sys'); },t);
+    s.log.forEach(l=>{ t+=gap; dWait(()=>{ if(Array.isArray(l)){ demoLog(l[0]); demoData(l[1]); } else demoLog(l); },t); });
+    t+=gap*.7; dWait(()=>demoStep(i,'ok'),t); t+=gap*.4;
+  });
+  dWait(demoAsk,t);
 }
 function demoTask(i,focus){
   dT=i; dTabs.forEach((t,k)=>{ t.setAttribute('aria-selected',String(k===i)); t.tabIndex=k===i?0:-1; });
   dPanel.setAttribute('aria-labelledby','tab-'+i);
-  demoBuildSteps(); demoGo(0,true);
+  demoReset();
   if(focus) dTabs[i].focus();
 }
-dTabs.forEach((t,i)=>{
-  t.addEventListener('click',()=>demoTask(i));
-  t.addEventListener('keydown',e=>{
-    let n=null;
-    if(e.key==='ArrowRight'||e.key==='ArrowDown') n=(i+1)%dTabs.length;
-    else if(e.key==='ArrowLeft'||e.key==='ArrowUp') n=(i+dTabs.length-1)%dTabs.length;
-    else if(e.key==='Home') n=0; else if(e.key==='End') n=dTabs.length-1;
-    if(n!==null){ e.preventDefault(); demoTask(n,true); }
-  });
-});
-dPrev.addEventListener('click',()=>demoGo(dS-1));
-dNext.addEventListener('click',()=>{ if(dS<3) demoGo(dS+1); else demoGo(0); });
+dTabs.forEach((t,i)=>t.addEventListener('click',()=>demoTask(i)));
+tabKeys(dTabs,demoTask);
+dStart.addEventListener('click',demoStart);
 demoTask(0);
+
+// ── Kontaktformular ──
+// Uden data-endpoint på formularen laves en færdig e-mail (mailto). Med data-endpoint sendes felterne dertil med POST.
+const FORM_TX={
+ da:{name:"Skriv dit navn.",email1:"Skriv en e-mailadresse, vi kan svare på.",email2:"E-mailadressen ser ikke rigtig ud. Tjek den en gang til.",task:"Skriv kort, hvilken opgave det handler om.",
+     send:"Send besked",mail:"Åbn e-mail med beskeden",copy:"Kopiér beskeden",copied:"Kopieret",sending:"Sender…",hintMail:"Knappen åbner jeres mailprogram med beskeden udfyldt.",hintSend:"",
+     ok:"Tak for jeres besked. Vi har modtaget den og svarer på mail.",fail:"Beskeden blev ikke sendt. Prøv igen om lidt, eller skriv til ",
+     mailed:"Vi har åbnet en e-mail med jeres besked. Tryk send i jeres mailprogram, så har vi den. Skete der ikke noget, så skriv til ",
+     subj:"Opgave, vi gerne vil automatisere",l:{name:"Navn",company:"Virksomhed",email:"E-mail",task:"Opgave",more:"Uddybning"}},
+ en:{name:"Please enter your name.",email1:"Please enter an email address we can reply to.",email2:"The email address does not look right. Please check it again.",task:"Please describe briefly which task it is about.",
+     send:"Send message",mail:"Open email with the message",copy:"Copy the message",copied:"Copied",sending:"Sending…",hintMail:"The button opens your mail program with the message filled in.",hintSend:"",
+     ok:"Thank you for your message. We have received it and will reply by email.",fail:"The message was not sent. Please try again shortly, or write to ",
+     mailed:"We have opened an email with your message. Press send in your mail program and we will have it. If nothing happened, write to ",
+     subj:"Task we would like to automate",l:{name:"Name",company:"Company",email:"Email",task:"Task",more:"Details"}}
+};
+const cForm=document.getElementById('contact-form'), cStatus=document.getElementById('form-status'), cSend=document.getElementById('form-send'), cHint=document.getElementById('form-hint');
+const cEndpoint=(cForm.dataset.endpoint||'').trim();
+const cFields={name:document.getElementById('f-name'),company:document.getElementById('f-company'),email:document.getElementById('f-email'),task:document.getElementById('f-task'),more:document.getElementById('f-more')};
+let cTried=false;
+cForm.setAttribute('novalidate','');
+function formCheck(k){
+  const T=FORM_TX[LANG], v=cFields[k].value.trim();
+  if(k==='name') return v?'':T.name;
+  if(k==='email') return !v?T.email1 : /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)?'':T.email2;
+  if(k==='task') return v?'':T.task;
+  return '';
+}
+function formShow(k){
+  const msg=formCheck(k), wrap=cFields[k].closest('.field'), out=document.getElementById('e-'+k);
+  if(!out) return !msg;
+  wrap.classList.toggle('err',!!msg); cFields[k].setAttribute('aria-invalid',String(!!msg));
+  out.textContent=''; if(msg){ out.append(icon('i-alert',15),el('span','',msg)); }
+  return !msg;
+}
+function formStatus(kind,text,mail,copyText){
+  cStatus.className='fstatus show is-'+kind; cStatus.textContent='';
+  cStatus.setAttribute('role',kind==='bad'?'alert':'status');
+  const box=el('div'), p=el('span','',text);
+  if(mail){ const a=el('a','','kontakt@nordagent.dk'); a.href='mailto:kontakt@nordagent.dk'; p.append(a,'.'); }
+  box.append(p);
+  if(copyText && navigator.clipboard && navigator.clipboard.writeText){
+    const T=FORM_TX[LANG], b=el('button','btn btn-ghost',T.copy); b.type='button';
+    b.addEventListener('click',()=>navigator.clipboard.writeText(copyText).then(()=>{b.textContent=FORM_TX[LANG].copied;},()=>{}));
+    box.append(b);
+  }
+  cStatus.append(icon(kind==='bad'?'i-alert':kind==='info'?'i-mail':'i-check',18),box);
+  cStatus.focus({preventScroll:false});
+}
+function formLabels(){
+  const T=FORM_TX[LANG];
+  cSend.textContent=cEndpoint?T.send:T.mail; cHint.textContent=cEndpoint?T.hintSend:T.hintMail;
+  if(cTried) ['name','email','task'].forEach(formShow);
+  if(!cForm.classList.contains('sent')){ cStatus.className='fstatus'; cStatus.textContent=''; }
+}
+['name','email','task'].forEach(k=>{
+  cFields[k].addEventListener('blur',()=>{ if(cTried||cFields[k].value) formShow(k); });
+  cFields[k].addEventListener('input',()=>{ if(cFields[k].closest('.field').classList.contains('err')) formShow(k); });
+});
+cForm.addEventListener('submit',e=>{
+  e.preventDefault(); cTried=true;
+  const T=FORM_TX[LANG];
+  const bad=['name','email','task'].filter(k=>!formShow(k));
+  if(bad.length){ cFields[bad[0]].focus(); return; }
+  if(document.getElementById('f-web').value) return; // udfyldt af en robot
+  const v={}; Object.keys(cFields).forEach(k=>v[k]=cFields[k].value.trim());
+  if(!cEndpoint){
+    const body=[T.l.name+': '+v.name, v.company?T.l.company+': '+v.company:null, T.l.email+': '+v.email, '', T.l.task+': '+v.task, v.more?'\n'+v.more:null].filter(x=>x!==null).join('\n');
+    const url='mailto:kontakt@nordagent.dk?subject='+encodeURIComponent(T.subj)+'&body='+encodeURIComponent(body);
+    cForm.dataset.lastMail=url;
+    window.location.href=url;
+    formStatus('info',T.mailed,true,body);
+    return;
+  }
+  cSend.disabled=true; cSend.textContent=T.sending;
+  fetch(cEndpoint,{method:'POST',body:new FormData(cForm),headers:{'Accept':'application/json'}})
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); cForm.classList.add('sent'); formStatus('ok',FORM_TX[LANG].ok); })
+    .catch(()=>{ formStatus('bad',FORM_TX[LANG].fail,true); })
+    .finally(()=>{ cSend.disabled=false; cSend.textContent=FORM_TX[LANG].send; });
+});
+formLabels();
 
 // ── Sprogskift ──
 function setLanguage(lang){
   LANG=lang; const D=lang==='en'?EN:DA;
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n; if(D[k]!==undefined) el.textContent=D[k];});
   document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.dataset.i18nHtml; if(D[k]!==undefined) el.innerHTML=D[k];});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.dataset.i18nPh; if(D[k]!==undefined) el.setAttribute('placeholder',D[k]);});
   [['btn-da','btn-en'],['mob-btn-da','mob-btn-en'],['footer-btn-da','footer-btn-en']].forEach(([a,b])=>{const da=document.getElementById(a),en=document.getElementById(b); if(!da||!en) return; da.setAttribute('aria-pressed',String(lang==='da')); en.setAttribute('aria-pressed',String(lang==='en'));});
   document.documentElement.lang=lang;
   try{localStorage.setItem('nordagent-lang',lang);}catch(e){}
   try{const url=new URL(window.location.href); if(lang==='en') url.searchParams.set('lang','en'); else url.searchParams.delete('lang'); history.replaceState(null,'',url.toString());}catch(e){}
   const c=document.querySelector('link[rel="canonical"]'); if(c) c.href=lang==='en'?'https://nordagent.dk?lang=en':'https://nordagent.dk';
-  stagePaint();
-  const keepS=dS, keepF=dFin; demoBuildSteps(); dS=keepS; clearTimeout(dBusy); dScreen.classList.remove('busy'); demoHead(); dFin=keepF; demoRows(false);
+  stagePaint(); ucRender(false); demoReset(); formLabels();
 }
 (function(){let saved='da'; try{saved=new URLSearchParams(location.search).get('lang')||localStorage.getItem('nordagent-lang')||'da';}catch(e){} if(saved==='en') setLanguage('en');})();
 
